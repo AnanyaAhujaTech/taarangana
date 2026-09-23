@@ -139,12 +139,19 @@
 /* ---------- Text and UI Positioning ---------- */
 .homecomp1-rasa-label {
   position: absolute;
-  top: 60vh;
-  left: 55vh;
+  top: 60%;
+  left: 50%;
+  transform: translateX(-50%); /* This perfectly centers the container */
   z-index: 10;
   display: flex;
-  justify-content: left;
+  
+  /* To push the text to the right, use padding or margin, 
+     not viewport units that shift with screen height */
   width: 100%;
+  max-width: 1200px; /* Constrain max width so it doesn't bleed off ultrawide screens */
+  padding-left: 10%; /* Adjust this percentage to offset the text right/left */
+  
+  justify-content: flex-start;
 }
 
 .homecomp1-rasa-label p {
