@@ -39,68 +39,6 @@
   background: transparent;
 }
 
-/* =========================================
-   📱 PORTRAIT (VERTICAL / LENGTH-WISE)
-   Keeps the standard 1-2-3-2-1 Vertical Diamond
-   ========================================= */
-@media (orientation: portrait) {
-  .hero {
-    --heading-top-position: 12%; 
-    --heading-width: clamp(220px, 60vmin, 400px);
-    --heading-height: clamp(120px, 20vmin, 350px);
-    
-    --spread-x: 22vmin; 
-    --spread-y: 26vmin; 
-    
-    --hex-width: clamp(70px, 25vmin, 140px);
-    --hex-height: clamp(80px, 28vmin, 160px);
-  }
-
-  /* Standard Vertical Layout Math */
-  .hexagon-wrapper {
-    transform: translate(-50%, -50%) translate(calc(var(--hex-x) * var(--spread-x)), calc(var(--hex-y) * var(--spread-y)));
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .hexagon-wrapper:hover {
-      transform: translate(-50%, -50%) translate(calc(var(--hex-x) * var(--spread-x)), calc(var(--hex-y) * var(--spread-y))) var(--hex-hover-scale);
-      filter: var(--hex-shadow-hover);
-      z-index: 20;
-    }
-  }
-}
-
-/* =========================================
-   🖥️ LANDSCAPE (HORIZONTAL / WIDTH-WISE)
-   Pivots the Grid 90-Degrees Left-to-Right
-   ========================================= */
-@media (orientation: landscape) {
-  .hero {
-    --heading-top-position: 18%; 
-    --heading-width: clamp(200px, 35vmin, 550px);
-    --heading-height: clamp(120px, 20vmin, 350px);
-    
-    --spread-x: 22vmin; 
-    --spread-y: 20vmin;
-    
-    --hex-width: clamp(70px, 18vmin, 160px);
-    --hex-height: clamp(80px, 20vmin, 180px);
-  }
-
-  /* 🔄 THE PIVOT MATH: X maps to Y, Y maps to X */
-  .hexagon-wrapper {
-    transform: translate(-50%, -50%) translate(calc(var(--hex-y) * var(--spread-x)), calc(var(--hex-x) * var(--spread-y)));
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .hexagon-wrapper:hover {
-      transform: translate(-50%, -50%) translate(calc(var(--hex-y) * var(--spread-x)), calc(var(--hex-x) * var(--spread-y))) var(--hex-hover-scale);
-      filter: var(--hex-shadow-hover);
-      z-index: 20;
-    }
-  }
-}
-
 /* --- Base Structural Styles --- */
 .hero-center-content {
   position: absolute;
@@ -133,10 +71,17 @@
   transition: top 0.4s ease;
 }
 
+/* 🧠 THE MAGIC PIVOT ENGINE 🧠 */
 .hexagon-wrapper {
   position: absolute;
   width: var(--hex-width); 
   height: var(--hex-height);
+  
+  /* DEFAULT MATH: X maps to X, Y maps to Y */
+  --tx: calc(var(--hex-x) * var(--spread-x));
+  --ty: calc(var(--hex-y) * var(--spread-y));
+  transform: translate(-50%, -50%) translate(var(--tx), var(--ty));
+  
   filter: var(--hex-shadow-normal);
   transition: transform var(--hex-transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275), filter var(--hex-transition-speed) ease;
   z-index: 10;
@@ -195,3 +140,62 @@
 
 .top-dot { top: var(--dot-offset); }
 .bottom-dot { bottom: var(--dot-offset); }
+
+
+/* =========================================
+   📱 PORTRAIT (VERTICAL / LENGTH-WISE)
+   Keeps the standard 1-2-3-2-1 Vertical Diamond
+   ========================================= */
+@media (orientation: portrait) {
+  .hero {
+    --heading-top-position: 12%; 
+    --heading-width: clamp(220px, 60vmin, 400px);
+    --heading-height: clamp(120px, 20vmin, 350px);
+    
+    --spread-x: 22vmin; 
+    --spread-y: 26vmin; 
+    
+    --hex-width: clamp(70px, 25vmin, 140px);
+    --hex-height: clamp(80px, 28vmin, 160px);
+  }
+  /* Uses the default --tx and --ty logic defined in .hexagon-wrapper */
+}
+
+
+/* =========================================
+   🖥️ LANDSCAPE (HORIZONTAL / WIDTH-WISE)
+   Pivots the Grid 90-Degrees Left-to-Right
+   ========================================= */
+@media (orientation: landscape) {
+  .hero {
+    --heading-top-position: 18%; 
+    --heading-width: clamp(200px, 35vmin, 550px);
+    --heading-height: clamp(120px, 20vmin, 350px);
+    
+    --spread-x: 22vmin; 
+    --spread-y: 20vmin;
+    
+    --hex-width: clamp(70px, 18vmin, 160px);
+    --hex-height: clamp(80px, 20vmin, 180px);
+  }
+
+  .hexagon-wrapper {
+    /* 🔄 SWAPS THE AXES FOR LANDSCAPE MODE */
+    --tx: calc(var(--hex-y) * var(--spread-x));
+    --ty: calc(var(--hex-x) * var(--spread-y));
+  }
+}
+
+
+/* =========================================
+   🖱 THE CORRECT HOVER FIX 
+   (Un-nested to prevent compiler crashes)
+   ========================================= */
+@media (hover: hover) and (pointer: fine) {
+  .hexagon-wrapper:hover {
+    /* Safe dynamic scale applying the active --tx and --ty values */
+    transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) var(--hex-hover-scale);
+    filter: var(--hex-shadow-hover);
+    z-index: 20;
+  }
+}
