@@ -101,12 +101,6 @@
   will-change: transform;
 }
 
-.hexagon-wrapper:hover {
-  transform: translate(-50%, -50%) translate(calc(var(--hex-x) * var(--spread-x)), calc(var(--hex-y) * var(--spread-y))) var(--hex-hover-scale);
-  filter: var(--hex-shadow-hover);
-  z-index: 20;
-}
-
 .hexagon-border {
   width: 100%;
   height: 100%;
@@ -164,13 +158,13 @@
    ========================================= */
 @media (max-width: 1024px) {
   .hero {
-    /* Pulls the ring noticeably tighter to prevent overflow */
-    --spread-x: 34vw;
-    --spread-y: 22vw;
+    /* vmin ensures the ring won't leak on short/wide tablet screens */
+    --spread-x: 34vmin;
+    --spread-y: 22vmin;
     
     /* Safely shrinks the shapes to match the tighter ring */
-    --hex-width: clamp(90px, 15vw, 150px);
-    --hex-height: clamp(80px, 14vw, 130px);
+    --hex-width: clamp(90px, 15vmin, 150px);
+    --hex-height: clamp(80px, 14vmin, 130px);
   }
 }
 
@@ -181,20 +175,24 @@
   .hero {
     --heading-top-position: 15%; 
     --container-top-position: 58%; 
-    --heading-width: clamp(200px, 65vw, 300px);
+    --heading-width: clamp(200px, 65vmin, 300px);
     
-    /* Gaps between diamond grid items. Keeps everything inside 100vw */
-    --spread-x: 16vw; 
-    --spread-y: 26vw; 
+    /* Using vmin prevents the stack from overflowing in landscape mode */
+    --spread-x: 16vmin; 
+    --spread-y: 26vmin; 
     
-    --hex-width: clamp(70px, 28vw, 110px);
-    --hex-height: clamp(90px, 32vw, 140px);
+    --hex-width: clamp(70px, 28vmin, 110px);
+    --hex-height: clamp(90px, 32vmin, 140px);
   }
+}
 
-  /* Removes 'sticky' touch hovering issues on mobile */
+/* =========================================
+   🖱️ THE CORRECT HOVER FIX (Only for devices with mice/trackpads)
+   ========================================= */
+@media (hover: hover) and (pointer: fine) {
   .hexagon-wrapper:hover {
-    transform: translate(-50%, -50%) translate(calc(var(--hex-x) * var(--spread-x)), calc(var(--hex-y) * var(--spread-y)));
-    filter: var(--hex-shadow-normal);
-    z-index: 10;
+    transform: translate(-50%, -50%) translate(calc(var(--hex-x) * var(--spread-x)), calc(var(--hex-y) * var(--spread-y))) var(--hex-hover-scale);
+    filter: var(--hex-shadow-hover);
+    z-index: 20;
   }
 }
