@@ -1,36 +1,24 @@
 /* =========================================
-   HERO COMPONENT STYLES
+   HERO COMPONENT STYLES (ORIENTATION-BASED)
    ========================================= */
 
 .hero {
-  /* 🎛️ THE CONTROL PANEL 🎛️️ */
-
-  /* 1. Layout & Positioning */
+  /* 🎛️ GLOBAL CONTROL PANEL (Applies to ALL screens) 🎛️ */
   --navbar-height: 80px;
-  /* Upgraded to dvh to prevent mobile browser scroll jumps */
   --hero-height: 100dvh;
-  --center-offset-y: 34px; 
-  --heading-top-position: calc(50% + var(--center-offset-y));
-  --container-top-position: calc(50% + var(--center-offset-y));
+  
+  /* 1. Permanently Locks Heading to the Top */
+  --heading-top-position: 15%; 
+  /* 2. Pushes the grid down to center the remaining space */
+  --container-top-position: 60%; 
 
-  /* 2. Heading Sizing */
-  --heading-width: clamp(250px, 35vw, 550px);
-  --heading-height: clamp(150px, 30vh, 350px);
+  --heading-width: clamp(200px, 35vmin, 550px);
+  --heading-height: clamp(120px, 20vmin, 350px);
   --heading-shadow: drop-shadow(0 0 15px #e6daada4);
 
-  /* 3. Hexagon Base Sizing (Upgraded to vmin to prevent ultrawide bleeding) */
-  --hex-width: clamp(100px, 15vmin, 220px);
-  --hex-height: clamp(85px, 13vmin, 200px);
-  
-  /* 4. Layout Spread / Gap Control (Upgraded to vmin to lock geometric aspect ratio) */
-  --spread-x: clamp(200px, 33vmin, 450px); 
-  --spread-y: clamp(120px, 18vmin, 280px);
-
-  /* 5. Hexagon Borders & Shapes */
   --hex-border-thickness: clamp(2px, 0.4vmin, 4px);
   --hex-shape: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   
-  /* 6. Animations & Shadows */
   --hex-transition-speed: 0.4s;
   --hex-hover-scale: scale(1.15);
   --hex-shadow-normal: drop-shadow(0 0 8px #e6daad6e);
@@ -38,17 +26,20 @@
   --hex-border-gradient: linear-gradient(145deg, #e6daad, #c8b675, #ddbd4b, #514b37);
   --hex-inner-bg: #1a0b2e;
 
-  /* 7. Background & Ornaments */
   --plain-bg-gradient: radial-gradient(circle at center, #3c1053, #150529);
   --dot-size: 4px;
   --dot-color: #e6daad;
   --dot-shadow: 0 0 5px var(--dot-color);
   --dot-offset: 15%; 
 
-  /* --- Base Hero Styles --- */
+  /* 🧠 THE MAGIC PIVOT ENGINE 🧠 */
+  /* By default, X maps to X and Y maps to Y */
+  --tx: calc(var(--hex-x) * var(--spread-x));
+  --ty: calc(var(--hex-y) * var(--spread-y));
+
   position: relative;
   width: 100%;
-  height: 100vh; /* Fallback for very old browsers */
+  height: 100vh; 
   height: var(--hero-height);
   padding-top: var(--navbar-height);
   box-sizing: border-box;
@@ -59,6 +50,50 @@
   background: transparent;
 }
 
+/* =========================================
+   📱 PORTRAIT (VERTICAL / LENGTH-WISE)
+   Keeps the standard 1-2-3-2-1 Vertical Diamond
+   ========================================= */
+@media (orientation: portrait) {
+  .hero {
+    --heading-top-position: 12%; 
+    --heading-width: clamp(220px, 60vmin, 400px);
+
+    /* Spreads longer vertically to form the tall diamond */
+    --spread-x: 22vmin; 
+    --spread-y: 26vmin; 
+    
+    --hex-width: clamp(70px, 25vmin, 140px);
+    --hex-height: clamp(80px, 28vmin, 160px);
+  }
+}
+
+/* =========================================
+   🖥️ LANDSCAPE (HORIZONTAL / WIDTH-WISE)
+   Pivots the Grid 90-Degrees Left-to-Right
+   ========================================= */
+@media (orientation: landscape) {
+  .hero {
+    --heading-top-position: 18%; 
+    --container-top-position: 60%; 
+    
+    /* 🔄 THE AXIS SWAP: 
+       We map the React Y coordinates to the CSS X axis, 
+       and the React X coordinates to the CSS Y axis. 
+       This rotates the entire structure sideways without tilting the images! */
+    --tx: calc(var(--hex-y) * var(--spread-x));
+    --ty: calc(var(--hex-x) * var(--spread-y));
+    
+    /* Spreads wider horizontally */
+    --spread-x: 22vmin; 
+    --spread-y: 20vmin;
+    
+    --hex-width: clamp(70px, 18vmin, 160px);
+    --hex-height: clamp(80px, 20vmin, 180px);
+  }
+}
+
+/* --- Base Structural Styles --- */
 .hero-center-content {
   position: absolute;
   top: var(--heading-top-position); 
@@ -94,8 +129,8 @@
   position: absolute;
   width: var(--hex-width); 
   height: var(--hex-height);
-  /* The spread logic is multiplied here dynamically */
-  transform: translate(-50%, -50%) translate(calc(var(--hex-x) * var(--spread-x)), calc(var(--hex-y) * var(--spread-y)));
+  /* Uses our dynamic axis variables */
+  transform: translate(-50%, -50%) translate(var(--tx), var(--ty));
   filter: var(--hex-shadow-normal);
   transition: transform var(--hex-transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275), filter var(--hex-transition-speed) ease;
   z-index: 10;
@@ -156,44 +191,12 @@
 .bottom-dot { bottom: var(--dot-offset); }
 
 /* =========================================
-   💻 TABLET RESPONSIVENESS (Fixes Screen Leaking)
-   ========================================= */
-@media (max-width: 1024px) {
-  .hero {
-    /* vmin ensures the ring won't leak on short/wide tablet screens */
-    --spread-x: 34vmin;
-    --spread-y: 22vmin;
-    
-    /* Safely shrinks the shapes to match the tighter ring */
-    --hex-width: clamp(90px, 15vmin, 150px);
-    --hex-height: clamp(80px, 14vmin, 130px);
-  }
-}
-
-/* =========================================
-   📱 MOBILE RESPONSIVENESS (Diamond Stack)
-   ========================================= */
-@media (max-width: 768px) {
-  .hero {
-    --heading-top-position: 15%; 
-    --container-top-position: 58%; 
-    --heading-width: clamp(200px, 65vmin, 300px);
-    
-    /* Using vmin prevents the stack from overflowing in landscape mode */
-    --spread-x: 16vmin; 
-    --spread-y: 26vmin; 
-    
-    --hex-width: clamp(70px, 28vmin, 110px);
-    --hex-height: clamp(90px, 32vmin, 140px);
-  }
-}
-
-/* =========================================
-   🖱️️ THE CORRECT HOVER FIX (Only for devices with mice/trackpads)
+   🖱 THE CORRECT HOVER FIX (Only for devices with mice/trackpads)
    ========================================= */
 @media (hover: hover) and (pointer: fine) {
   .hexagon-wrapper:hover {
-    transform: translate(-50%, -50%) translate(calc(var(--hex-x) * var(--spread-x)), calc(var(--hex-y) * var(--spread-y))) var(--hex-hover-scale);
+    /* Applies the dynamic axis variables + hover scale */
+    transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) var(--hex-hover-scale);
     filter: var(--hex-shadow-hover);
     z-index: 20;
   }
