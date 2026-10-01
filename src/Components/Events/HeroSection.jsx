@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./HeroSection.css";
 import heading from "../../assets/EventsHeading.png";
 
@@ -14,49 +14,23 @@ import vid9 from "../../assets/Untitled design (13).mp4";
 
 const videos = [vid1, vid2, vid3, vid4, vid5, vid6, vid7, vid8, vid9];
 
+// 1-2-3-2-1 Diamond Grid Base Coordinates
+const diamondGrid = [
+  { x: 0, y: -2 },                            // Row 1
+  { x: -1, y: -1 }, { x: 1, y: -1 },          // Row 2
+  { x: -2, y: 0 }, { x: 0, y: 0 }, { x: 2, y: 0 }, // Row 3
+  { x: -1, y: 1 }, { x: 1, y: 1 },            // Row 4
+  { x: 0, y: 2 }                              // Row 5
+];
+
 export default function HeroSection() {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      // Switch to honeycomb at 768px and below
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    handleResize(); 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const START_ANGLE = -Math.PI / 2;
-
   const honeycombPositions = videos.map((video, index) => {
-    let x, y;
-
-    if (isMobile) {
-      // MOBILE: 1-2-3-2-1 Diamond Grid Base Coordinates
-      const mobileGrid = [
-        { x: 0, y: -2 },                            // Row 1
-        { x: -1, y: -1 }, { x: 1, y: -1 },          // Row 2
-        { x: -2, y: 0 }, { x: 0, y: 0 }, { x: 2, y: 0 }, // Row 3
-        { x: -1, y: 1 }, { x: 1, y: 1 },            // Row 4
-        { x: 0, y: 2 }                              // Row 5
-      ];
-      x = mobileGrid[index].x;
-      y = mobileGrid[index].y;
-    } else {
-      // DESKTOP & TABLET: Normalized Elliptical Coordinates (-1 to 1)
-      const angle = START_ANGLE + (index / videos.length) * (2 * Math.PI);
-      x = Math.cos(angle);
-      y = Math.sin(angle);
-    }
-    
     return {
       id: index + 1,
       type: "video",
       videoSrc: video,
-      x: x,
-      y: y,
+      x: diamondGrid[index].x,
+      y: diamondGrid[index].y,
     };
   });
 
