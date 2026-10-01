@@ -3,11 +3,12 @@
    ========================================= */
 
 .hero {
-  /* 🎛️ THE CONTROL PANEL 🎛️ */
+  /* 🎛️ THE CONTROL PANEL 🎛️️ */
 
   /* 1. Layout & Positioning */
   --navbar-height: 80px;
-  --hero-height: 100vh;
+  /* Upgraded to dvh to prevent mobile browser scroll jumps */
+  --hero-height: 100dvh;
   --center-offset-y: 34px; 
   --heading-top-position: calc(50% + var(--center-offset-y));
   --container-top-position: calc(50% + var(--center-offset-y));
@@ -17,13 +18,13 @@
   --heading-height: clamp(150px, 30vh, 350px);
   --heading-shadow: drop-shadow(0 0 15px #e6daada4);
 
-  /* 3. Hexagon Base Sizing (Responsive across all screens) */
-  --hex-width: clamp(100px, 15vw, 220px);
-  --hex-height: clamp(85px, 13vw, 200px);
+  /* 3. Hexagon Base Sizing (Upgraded to vmin to prevent ultrawide bleeding) */
+  --hex-width: clamp(100px, 15vmin, 220px);
+  --hex-height: clamp(85px, 13vmin, 200px);
   
-  /* 4. Layout Spread / Gap Control (Dynamically pulls elements closer on smaller screens) */
-  --spread-x: clamp(200px, 33vw, 450px); 
-  --spread-y: clamp(120px, 18vw, 280px);
+  /* 4. Layout Spread / Gap Control (Upgraded to vmin to lock geometric aspect ratio) */
+  --spread-x: clamp(200px, 33vmin, 450px); 
+  --spread-y: clamp(120px, 18vmin, 280px);
 
   /* 5. Hexagon Borders & Shapes */
   --hex-border-thickness: clamp(2px, 0.4vmin, 4px);
@@ -47,6 +48,7 @@
   /* --- Base Hero Styles --- */
   position: relative;
   width: 100%;
+  height: 100vh; /* Fallback for very old browsers */
   height: var(--hero-height);
   padding-top: var(--navbar-height);
   box-sizing: border-box;
@@ -187,7 +189,7 @@
 }
 
 /* =========================================
-   🖱️ THE CORRECT HOVER FIX (Only for devices with mice/trackpads)
+   🖱️️ THE CORRECT HOVER FIX (Only for devices with mice/trackpads)
    ========================================= */
 @media (hover: hover) and (pointer: fine) {
   .hexagon-wrapper:hover {
