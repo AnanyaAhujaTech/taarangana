@@ -28,7 +28,7 @@ const questions = [
   },
   {
     q: "What am I allowed to bring inside?",
-    a: "Travel light. Only essentials like your phone and wallet are allowed. Bags, purses, and outside food or drinks (yes, even water bottles) won’t be permitted inside the venue."
+    a: "Travel light. Only essentials like your phone, wallet and small clutches are allowed. Large bags and outside food or drinks (yes, even water bottles) won’t be permitted inside the venue."
   },
   {
     q: "Can students from other colleges attend?",
@@ -40,7 +40,7 @@ const questions = [
   },
   {
     q: "How do I stay updated about events and announcements?",
-    a: "Follow Taarangana on Instagram and keep an eye on the website. That’s where all the updates drop first."
+    a: "Follow Taarangana on Instagram and keep an eye on the website. That’s where all the updates drop first. Don't buy tickets from third-party resellers."
   }
 ];
 
