@@ -1,106 +1,214 @@
-import React, { useState, useEffect, useRef } from 'react';
-import './team.css';
+import React, { useEffect, useRef, useState } from 'react';
+import Navbar from '../../Components/Navbar/Navbar';
+import './Team.css';
 
-export default function MemberCard({ member, isGrid, cardWidth, delay, config, glowColor, getAsset, isMobile }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  
-  const [rotate, setRotate] = useState({ x: 0, y: 0 });
-  const cardRef = useRef(null);
+// ==========================================
+// 🛠️ CONFIG & DIRECTORY MAPPING
+// ==========================================
+const AUTO_SPEED = 0.6;     // Scroll speed
+const RESUME_DELAY = 2500;  // Pause duration after interacting
+const LOOP_COPIES = 3;      // Required for the seamless infinite loop
+const TOTAL_PAGES = 12;     // The exact number of wall images
+
+// The array of pages: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+const PAGES = Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1);
+
+// The Podium Index Links mapping exactly to your request
+const PODIUM_LINKS = [
+  { label: 'Website', pageNumber: 2 },
+  { label: 'Event Management', pageNumber: 4 },
+  { label: 'PR & Security', pageNumber: 6 },
+  { label: 'Creative', pageNumber: 7 },
+  { label: 'HR & Logistics', pageNumber: 8 },
+  { label: 'Sponsorship', pageNumber: 10 },
+  { label: 'Social Media', pageNumber: 11 },
+];
+
+const preloadedAssets = import.meta.glob('../../assets/*.{webp,jpg,jpeg,svg,png}', {
+  eager: true,
+  import: 'default',
+});
+
+const getAsset = (name) => {
+  const path = `../../assets/${name}`;
+  if (!preloadedAssets[path]) {
+    console.warn(`Asset not found: ${name}`);
+    return null;
+  }
+  return preloadedAssets[path];
+};
+
+// ==========================================
+// 🚀 MAIN PAGE COMPONENT
+// ==========================================
+export default function TeamPage() {
+  const scrollRef = useRef(null);
+  const interactionRef = useRef({ trigger: () => {} });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const hoverTimeoutRef = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    if (cardRef.current) observer.observe(cardRef.current);
-    return () => observer.disconnect();
+    const el = scrollRef.current;
+    if (!el) return;
+
+    // Start in the middle loop for infinite scroll safety
+    const loopWidth = () => el.scrollWidth / LOOP_COPIES;
+    el.scrollLeft = loopWidth(); 
+
+    let pos = el.scrollLeft;
+    let raf;
+    let hovering = false;
+    let interacting = false;
+    let timer;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Pauses the auto-scroll loop for manual interactions/clicks
+    const touch = () => {
+      interacting = true;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        pos = el.scrollLeft;
+        interacting = false;
+      }, RESUME_DELAY);
+    };
+    
+    interactionRef.current.trigger = touch;
+
+    const onScroll = () => {
+      const s = loopWidth();
+      if (el.scrollLeft >= s * 2) el.scrollLeft -= s;
+      else if (el.scrollLeft < s * 0.5) el.scrollLeft += s;
+      if (interacting) touch();
+    };
+
+    const onWheel = (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) el.scrollLeft += e.deltaY;
+      touch();
+    };
+    
+    const onEnter = () => { hovering = true; };
+    const onLeave = () => { hovering = false; pos = el.scrollLeft; };
+
+    const tick = () => {
+      if (!interacting && !hovering && !reduceMotion) {
+        pos += AUTO_SPEED;
+        el.scrollLeft = pos;
+        if (pos >= loopWidth() * 2) pos -= loopWidth();
+      }
+      raf = requestAnimationFrame(tick);
+    };
+
+    el.addEventListener('scroll', onScroll, { passive: true });
+    el.addEventListener('wheel', onWheel, { passive: true });
+    el.addEventListener('pointerdown', touch);
+    el.addEventListener('mouseenter', onEnter);
+    el.addEventListener('mouseleave', onLeave);
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+      el.removeEventListener('scroll', onScroll);
+      el.removeEventListener('wheel', onWheel);
+      el.removeEventListener('pointerdown', touch);
+      el.removeEventListener('mouseenter', onEnter);
+      el.removeEventListener('mouseleave', onLeave);
+    };
   }, []);
 
-  const handleMouseMove = (e) => {
-    if (isMobile || !cardRef.current) return;
-    const { left, top, width, height } = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - left - width / 2) / 20; 
-    const y = -(e.clientY - top - height / 2) / 20;
-    setRotate({ x: y, y: x });
+  const handleMouseEnterPodium = () => {
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    setIsSidebarOpen(true);
   };
 
-  const handleMouseLeave = () => {
-    if (isMobile) return;
-    setIsHovered(false);
-    setRotate({ x: 0, y: 0 }); 
+  const handleMouseLeavePodium = () => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsSidebarOpen(false);
+    }, 250);
+  };
+
+  const handleSidebarClick = (pageNumber) => {
+    // 1 always denotes the middle copy to ensure the infinite scroll math doesn't break
+    const target = document.getElementById(`1-page-${pageNumber}`);
+    if (target) {
+      interactionRef.current.trigger();
+      target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    }
   };
 
   return (
-    <div
-      ref={cardRef}
-      className="member-card-outer"
-      style={!isMobile ? {
-        width: cardWidth, 
-        height: isGrid ? config.gridCardHeight : '100%',
-        maxWidth: isGrid ? 'none' : config.cardMaxWidth,
-        maxHeight: isGrid ? 'none' : config.cardMaxHeight,
-        padding: isGrid ? '0' : `0 ${config.cardPadding}`,
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translateY(0)' : 'translateY(50px)',
-        transition: `opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}s, transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}s`,
-      } : {
-        /* 🟢 Mobile strictly manages only opacity so scroll-snap doesn't jitter */
-        opacity: isVisible ? 1 : 0,
-        transition: `opacity 0.6s ease`,
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => !isMobile && setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-    >
-      <div 
-        className="member-card-visual"
-        style={{
-          transform: isMobile ? 'none' : `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale(${isHovered ? 1.02 : 1})`,
-          boxShadow: (isHovered || isMobile)
-            ? `0 20px 50px rgba(${glowColor}, 0.5), 0 0 20px rgba(${glowColor}, 0.3)` 
-            : `0 10px 20px rgba(0,0,0,0.3), 0 0 10px rgba(${glowColor}, 0.2)`,       
-          border: (isHovered || isMobile) ? `1px solid rgba(${glowColor}, 0.3)` : '1px solid transparent',
+    <div className="team-page-wrapper">
+      <Navbar isVisible={true} />
+
+      {/* 🟢 FLOATING HEADING */}
+      <div className="team-heading-container">
+        <img src={getAsset('teamheading.webp')} alt="Team Heading" className="team-heading-image" />
+      </div>
+
+      {/* 🟢 DIRECTORY SIDEBAR */}
+      <nav 
+        className="team-sidebar-container"
+        style={{ 
+          pointerEvents: isSidebarOpen ? 'auto' : 'none',
+          opacity: isSidebarOpen ? 1 : 0 
         }}
+        onMouseEnter={handleMouseEnterPodium} 
+        onMouseLeave={handleMouseLeavePodium}
       >
-        <div
-          className="member-card-layer"
-          style={{
-            opacity: config.embroideryOpacity, 
-            backgroundImage: `url(${getAsset(member.embroidery)})`,
-          }}
-        />
+        {PODIUM_LINKS.map((link, index) => {
+          const reverseIndex = PODIUM_LINKS.length - 1 - index;
+          return (
+            <button
+              key={link.pageNumber}
+              onClick={() => handleSidebarClick(link.pageNumber)}
+              className="team-sidebar-item"
+              style={{
+                opacity: isSidebarOpen ? 1 : 0,
+                transform: isSidebarOpen ? 'translateY(0)' : 'translateY(20px)',
+                transitionDelay: `${reverseIndex * 30}ms`,
+              }}
+            >
+              {link.label}
+            </button>
+          );
+        })}
+      </nav>
 
-        <div className="member-content-wrapper">
-          <div className="member-frame-assembly">
-            <div className="member-photo-container" style={{
-              clipPath: member.clipPath, 
-              WebkitClipPath: member.clipPath,
-              borderRadius: config.photoRadius
-            }}>
-              {getAsset(member.photo) ? (
-                <img
-                  src={getAsset(member.photo)}
-                  alt={`Member ${member.id}`}
-                  className="member-photo"
-                  style={{ transform: (isHovered && !isMobile) ? 'scale(1.1)' : 'scale(1)' }}
+      {/* 🟢 12-IMAGE FULLSCREEN CAROUSEL */}
+      <div className="team-scroll-container" ref={scrollRef}>
+        <div className="team-track">
+          {Array.from({ length: LOOP_COPIES }).map((_, copy) => (
+            <React.Fragment key={`loop-${copy}`}>
+              {PAGES.map((pageNum) => (
+                <img 
+                  key={`${copy}-${pageNum}`}
+                  id={`${copy}-page-${pageNum}`}
+                  src={getAsset(`page${pageNum}.webp`)}
+                  alt={`Team Section ${pageNum}`}
+                  className="team-wall-image"
+                  draggable={false}
+                  // Performance hack: Only eager load the middle loop (the one the user actually sees on page load)
+                  loading={copy === 1 ? "eager" : "lazy"} 
                 />
-              ) : (
-                <div style={{ width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)' }} />
-              )}
-            </div>
-            <img src={getAsset(member.frame)} alt="Frame" className="member-frame-image" />
-          </div>
-
-          <div className="member-plate-container">
-            <img src={getAsset(member.plate)} alt="Info Plate" className="member-plate-image" />
-          </div>
+              ))}
+            </React.Fragment>
+          ))}
         </div>
+      </div>
+
+      {/* 🟢 PODIUM */}
+      <div 
+        className="team-podium-container"
+        onMouseEnter={handleMouseEnterPodium}
+        onMouseLeave={handleMouseLeavePodium}
+      >
+        <img 
+          src={getAsset('podium.webp')} 
+          alt="Menu" 
+          className="team-podium-image" 
+          draggable={false}
+          style={{ filter: isSidebarOpen ? 'brightness(1.1) drop-shadow(0 0 15px rgba(255,215,0,0.6))' : 'none' }}
+        />
       </div>
     </div>
   );

@@ -2,8 +2,19 @@
   position: absolute;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.team-background-strip {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+}
+
+.team-background-tile {
+  flex: 1 0 0;
+  height: 100%;
   background-size: cover;
   background-position: center;
-  filter: brightness(0.6);
-  pointer-events: none;
 }

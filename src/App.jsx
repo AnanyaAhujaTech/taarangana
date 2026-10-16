@@ -1,5 +1,4 @@
-import React from 'react';
-// 1. Change BrowserRouter to HashRouter here:
+import React, { useEffect } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './Pages/Home/Home';
 import ItineraryPage from './Pages/Itinerary/Itinerary';
@@ -9,9 +8,21 @@ import Sponsi from './Pages/Sponsi/Sponsi';
 
 import './index.css';
 
+// Safely grab the first page without crashing if it doesn't exist yet
+const teamAssets = import.meta.glob('./assets/page1.webp', { eager: true, import: 'default' });
+
 function App() {
+  useEffect(() => {
+    // 🟢 SILENT PRELOAD: Downloads the first Team page in the background 
+    // as soon as the app opens, so it's instantly cached before they visit the route.
+    const firstPagePath = Object.keys(teamAssets)[0];
+    if (firstPagePath) {
+      const img = new Image();
+      img.src = teamAssets[firstPagePath];
+    }
+  }, []);
+
   return (
-    // 2. Change the wrapper components to HashRouter here:
     <HashRouter>
       <div className="App">
         <Routes>
