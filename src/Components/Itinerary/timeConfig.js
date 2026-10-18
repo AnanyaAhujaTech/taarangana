@@ -4,8 +4,8 @@
 // 📅 TIME CONFIGURATION
 // ==========================================
 
-export const PREFEST_START = new Date("2026-03-01T00:00:00");
-export const FEST_START = new Date("2026-03-18T11:00:00");
+export const PREFEST_START = new Date("2026-10-21T00:00:00");
+export const FEST_START = new Date("2026-10-22T11:10:30");
 
 // ==========================================
 // ⚙️ ANIMATION SETTINGS

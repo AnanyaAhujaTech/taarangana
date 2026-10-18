@@ -1,200 +1,175 @@
 /* =========================================
-   HERO COMPONENT STYLES
+   HERO CONTAINER
    ========================================= */
-
 .hero {
-  /* 🎛️ THE CONTROL PANEL 🎛️ */
-
-  /* 1. Layout & Positioning */
   --navbar-height: 80px;
-  --hero-height: 100vh;
-  --center-offset-y: 34px; 
-  --heading-top-position: calc(50% + var(--center-offset-y));
-  --container-top-position: calc(50% + var(--center-offset-y));
-
-  /* 2. Heading Sizing */
-  --heading-width: clamp(250px, 35vw, 550px);
-  --heading-height: clamp(150px, 30vh, 350px);
-  --heading-shadow: drop-shadow(0 0 15px #e6daada4);
-
-  /* 3. Hexagon Base Sizing (Responsive across all screens) */
-  --hex-width: clamp(100px, 15vw, 220px);
-  --hex-height: clamp(85px, 13vw, 200px);
-  
-  /* 4. Layout Spread / Gap Control (Dynamically pulls elements closer on smaller screens) */
-  --spread-x: clamp(200px, 33vw, 450px); 
-  --spread-y: clamp(120px, 18vw, 280px);
-
-  /* 5. Hexagon Borders & Shapes */
-  --hex-border-thickness: clamp(2px, 0.4vmin, 4px);
-  --hex-shape: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  
-  /* 6. Animations & Shadows */
-  --hex-transition-speed: 0.4s;
-  --hex-hover-scale: scale(1.15);
-  --hex-shadow-normal: drop-shadow(0 0 8px #e6daad6e);
-  --hex-shadow-hover: drop-shadow(0 0 20px #e6daad);
-  --hex-border-gradient: linear-gradient(145deg, #e6daad, #c8b675, #ddbd4b, #514b37);
-  --hex-inner-bg: #1a0b2e;
-
-  /* 7. Background & Ornaments */
-  --plain-bg-gradient: radial-gradient(circle at center, #3c1053, #150529);
-  --dot-size: 4px;
-  --dot-color: #e6daad;
-  --dot-shadow: 0 0 5px var(--dot-color);
-  --dot-offset: 15%; 
-
-  /* --- Base Hero Styles --- */
-  position: relative;
   width: 100%;
-  height: var(--hero-height);
-  padding-top: var(--navbar-height);
-  box-sizing: border-box;
+  height: 100vh;
+  overflow: hidden;
   scroll-snap-align: start;
   scroll-snap-stop: always;
-  overflow: hidden; 
   display: flex;
-  background: transparent;
+  flex-direction: column;
+  align-items: center;
+  padding-top: calc(var(--navbar-height) + 1vh);
+  padding-bottom: 3vh; 
+  box-sizing: border-box;
 }
 
-.hero-center-content {
-  position: absolute;
-  top: var(--heading-top-position); 
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
+/* =========================================
+   🏗️ THE MASTER WRAPPER (Locks layout width)
+   ========================================= */
+.hero-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 92vw;
+  max-width: 150vh; 
+  height: 100%; 
+  margin: 0 auto;
+}
+
+/* =========================================
+   THE ROOF & HEADING
+   ========================================= */
+.roof-and-heading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%; /* Fills the master wrapper perfectly */
+  flex-shrink: 0; 
+  margin-bottom: 2vh;
+  z-index: 30;
+}
+
+.roof-svg {
+  width: 100%; /* Stretches to align perfectly with the grid edges */
+  
+  /* 🎛️ THE FIX: Forces the SVG to flatten out and stretch wide */
+  height: 16vh; 
+  min-height: 70px;
+  object-fit: fill; /* This overrides the SVG's natural aspect ratio */
+  
+  margin-bottom: -5vh; /* Tucks heading up further into the now-flattened roof */
+  filter: drop-shadow(0 0 10px rgba(230, 218, 173, 0.4));
+  z-index: 5;
+}
+
+.hero-header-wrapper {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  pointer-events: none;
-  transition: top 0.4s ease; 
+  z-index: 10;
+}
+
+.golden-glow-backdrop {
+  position: absolute;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(230, 218, 173, 0.45) 0%, rgba(230, 218, 173, 0) 65%);
+  filter: blur(25px);
+  z-index: -1;
 }
 
 .events-heading {
-  width: auto;
-  max-width: var(--heading-width);
-  max-height: var(--heading-height);
+  max-height: clamp(40px, 8vh, 120px); 
   object-fit: contain;
-  filter: var(--heading-shadow);
+  filter: drop-shadow(0 0 10px rgba(230, 218, 173, 0.8)); 
 }
 
-.hexagon-container {
-  position: absolute;
-  top: var(--container-top-position); 
-  left: 50%;
-  width: 0;
-  height: 0;
-  z-index: 5;
-  transition: top 0.4s ease;
-}
-
-.hexagon-wrapper {
-  position: absolute;
-  width: var(--hex-width); 
-  height: var(--hex-height);
-  /* The spread logic is multiplied here dynamically */
-  transform: translate(-50%, -50%) translate(calc(var(--hex-x) * var(--spread-x)), calc(var(--hex-y) * var(--spread-y)));
-  filter: var(--hex-shadow-normal);
-  transition: transform var(--hex-transition-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275), filter var(--hex-transition-speed) ease;
+/* =========================================
+   THE FLUID 3x3 GRID
+   ========================================= */
+.cinematic-videos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: clamp(8px, 1.2vw, 20px); 
+  
+  width: 100%; /* Inherits the 92vw from the master wrapper */
+  flex: 1; /* Exactly fills remaining space */
+  min-height: 0; 
   z-index: 10;
-  cursor: pointer;
-  will-change: transform;
 }
 
-.hexagon-wrapper:hover {
-  transform: translate(-50%, -50%) translate(calc(var(--hex-x) * var(--spread-x)), calc(var(--hex-y) * var(--spread-y))) var(--hex-hover-scale);
-  filter: var(--hex-shadow-hover);
-  z-index: 20;
-}
-
-.hexagon-border {
+/* =========================================
+   INDIVIDUAL VIDEO CARDS & LAYERS
+   ========================================= */
+.video-card-wrapper {
+  position: relative;
   width: 100%;
   height: 100%;
-  clip-path: var(--hex-shape);
-  background: var(--hex-border-gradient);
-  position: absolute;
-  top: 0;
-  left: 0;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 12px;
+  padding: 2px; 
+  background: var(--event-color);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--event-color) 40%, transparent);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
-.hexagon-inner {
-  position: absolute;
-  top: var(--hex-border-thickness);
-  left: var(--hex-border-thickness);
-  right: var(--hex-border-thickness);
-  bottom: var(--hex-border-thickness);
-  clip-path: var(--hex-shape);
-  background-color: var(--hex-inner-bg);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.video-card-wrapper:hover {
+  transform: scale(1.03);
+  z-index: 20;
+  box-shadow: 0 0 25px color-mix(in srgb, var(--event-color) 80%, transparent);
+}
+
+.video-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px; 
   overflow: hidden;
+  background-color: #0b0515; 
 }
 
-.hexagon-video {
+/* --- THE STATIC THUMBNAIL LAYER --- */
+.thumbnail-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  transition: opacity 0.4s ease;
+}
+
+.thumbnail-layer.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.event-thumbnail {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0.65; 
 }
 
-.plain-bg {
+.stained-glass-overlay {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  background: var(--plain-bg-gradient);
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  object-fit: cover; 
+  pointer-events: none;
+  opacity: 1; 
+  mix-blend-mode: overlay; 
 }
 
-.plain-dot {
+/* --- THE VIDEO LAYER --- */
+.event-video {
   position: absolute;
-  width: var(--dot-size);
-  height: var(--dot-size);
-  border-radius: 50%;
-  background-color: var(--dot-color);
-  box-shadow: var(--dot-shadow);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 5;
+  opacity: 0; 
+  transition: opacity 0.4s ease;
 }
 
-.top-dot { top: var(--dot-offset); }
-.bottom-dot { bottom: var(--dot-offset); }
-
-/* =========================================
-   💻 TABLET RESPONSIVENESS (Fixes Screen Leaking)
-   ========================================= */
-@media (max-width: 1024px) {
-  .hero {
-    /* Pulls the ring noticeably tighter to prevent overflow */
-    --spread-x: 34vw;
-    --spread-y: 22vw;
-    
-    /* Safely shrinks the shapes to match the tighter ring */
-    --hex-width: clamp(90px, 15vw, 150px);
-    --hex-height: clamp(80px, 14vw, 130px);
-  }
-}
-
-/* =========================================
-   📱 MOBILE RESPONSIVENESS (Diamond Stack)
-   ========================================= */
-@media (max-width: 768px) {
-  .hero {
-    --heading-top-position: 15%; 
-    --container-top-position: 58%; 
-    --heading-width: clamp(200px, 65vw, 300px);
-    
-    /* Gaps between diamond grid items. Keeps everything inside 100vw */
-    --spread-x: 16vw; 
-    --spread-y: 26vw; 
-    
-    --hex-width: clamp(70px, 28vw, 110px);
-    --hex-height: clamp(90px, 32vw, 140px);
-  }
-
-  /* Removes 'sticky' touch hovering issues on mobile */
-  .hexagon-wrapper:hover {
-    transform: translate(-50%, -50%) translate(calc(var(--hex-x) * var(--spread-x)), calc(var(--hex-y) * var(--spread-y)));
-    filter: var(--hex-shadow-normal);
-    z-index: 10;
-  }
+.event-video.visible {
+  opacity: 0.85; 
 }

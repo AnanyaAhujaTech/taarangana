@@ -2,6 +2,23 @@ import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { events } from "../../data/eventsData";
 import "./EventDetailPage.css";
+import ReactMarkdown from "react-markdown";
+
+// 🔗 ========================================================= 🔗
+// 🔗 PASTE YOUR GOOGLE FORM / REGISTRATION LINKS HERE        🔗
+// 🔗 Replace the empty strings ("") with your actual links.  🔗
+// 🔗 ========================================================= 🔗
+const REGISTRATION_LINKS = {
+  "antra": "https://docs.google.com/forms/d/1nEYzNzlsqGJepuNU7VElZ7DUDu8VculmremA1EMdcqc/viewform?edit_requested=true",
+  "rap-battle": "https://docs.google.com/forms/d/1qFLStopYwF4igCGSQwtIX8vEiYF-1OyUThxdYCKoDJo/viewform?edit_requested=true",
+  "aaghaz": "https://docs.google.com/forms/d/13ekpwViG5r-FcKt3-2hbnOjz1KvYz5JlO5DAMQP_a5w/viewform?edit_requested=true",
+  "slam-poetry": "https://docs.google.com/forms/d/e/1FAIpQLSe2fxJGF8AZtT9o7kJBIIpGB3Kpg-4mc5L7kpiCsonQQBtb6g/viewform",
+  "lilac-dreams": "https://docs.google.com/forms/d/e/1FAIpQLSd7FPFaBHsSkVf8qCS_D4eC9R41v1tWdMgwjw7IWbBlbkqoEQ/viewform",
+  "urban-thump": "https://docs.google.com/forms/d/e/1FAIpQLSendjf_9JoMGvH2SS-KUinD0ZJ7Z_fA_OS0es947M6IoXO1xw/viewform",
+  "aalap": "https://docs.google.com/forms/d/e/1FAIpQLSeHUKzfCCkoqs9dsgzg3uM7dQPzIIuq7esK125v1_NwZ-NpHw/viewform",
+  "mr-and-ms-taarangana": "https://docs.google.com/forms/d/e/1FAIpQLSdowDavqyO_S8C5zHPdTnq8RKuxSLX5h45ooYtFzR709gHLTA/viewform",
+  "rangmanch": "https://docs.google.com/forms/d/e/1FAIpQLSfOBxZMFBje7_XTU3R_pqw7KB3w9_SCw50luS14PtdvBYn4xQ/viewform"
+};
 
 export default function EventDetailPage() {
   const { eventId } = useParams();
@@ -9,6 +26,9 @@ export default function EventDetailPage() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const event = events.find((e) => e.id === eventId);
+  
+  // Grab the specific link for this event from our dictionary above
+  const currentFormLink = REGISTRATION_LINKS[eventId];
 
   const handleMouseMove = (e) => {
     const { clientX, clientY } = e;
@@ -327,9 +347,44 @@ export default function EventDetailPage() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              <button disabled className="register-btn-disabled">
-                Registration Coming Soon
-              </button>
+              
+              {/* 🟢 DYNAMIC REGISTRATION BUTTON 🟢 */}
+              {currentFormLink ? (
+                <a
+                  href={currentFormLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="register-btn-active"
+                  style={{
+                    backgroundColor: event.rasaColor || "#55e6d1",
+                    color: "#0b0515", // Deep dark color for contrast against bright rasa colors
+                    padding: "0.8rem 1.5rem",
+                    borderRadius: "8px",
+                    textAlign: "center",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                    boxShadow: `0 4px 15px ${event.rasaColor ? event.rasaColor + '66' : 'rgba(85, 230, 208, 0.4)'}`,
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                    display: "inline-block"
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow = `0 6px 20px ${event.rasaColor ? event.rasaColor + '99' : 'rgba(85, 230, 208, 0.6)'}`;
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = `0 4px 15px ${event.rasaColor ? event.rasaColor + '66' : 'rgba(85, 230, 208, 0.4)'}`;
+                  }}
+                >
+                  Register Now
+                </a>
+              ) : (
+                <button disabled className="register-btn-disabled">
+                  Registration Coming Soon
+                </button>
+              )}
+
             </div>
           </div>
         </div>
@@ -341,7 +396,7 @@ export default function EventDetailPage() {
               <h2 style={{ color: event.rasaColor || "#55e6d1" }}>
                 {event.title.toUpperCase()} — ABOUT & RULES
               </h2>
-              <p style={{ whiteSpace: "pre-line" }}>{event.aboutText}</p>
+              <div className="event-markdown-content"><ReactMarkdown>{event.aboutText}</ReactMarkdown></div>
             </div>
           </div>
         )}

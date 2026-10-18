@@ -1,1654 +1,358 @@
 /* =========================================================
    SPONSI CONTAINER
    ========================================================= */
-
 .sponsi-container {
-  /*
-   * IMPORTANT:
-   * This container provides the reference width for cqw.
-   *
-   * 1cqw = 1% of this container's width.
-   */
-  container-type: inline-size;
-
-  --nav-h: 64px;
-
-  /*
-   * 1536px reference design.
-   *
-   * At 1536px:
-   * 1cqw = 15.36px
-   * 0.0651041667cqw = 1px
-   *
-   * Therefore:
-   * calc(460 * var(--sp-k)) = 460px
-   */
-  --sp-k: 0.0651041667cqw;
-
-  --banner-w: 460;
-  --cluster-w: 210;
-
+  --nav-h: 80px;
   position: fixed;
-
   inset: 0;
-
   width: 100%;
   height: 100%;
-
   margin: 0;
   padding: 0;
-
   overflow: hidden;
-
   background: #17051d;
+  font-family: "Times New Roman", Times, serif;
 }
 
-
 /* =========================================================
-   SCROLL CONTAINER
+   BACKGROUND & DECORATIONS
    ========================================================= */
-
-.sponsi-scroll {
-  position: relative;
-
-  width: 100%;
-  height: 100%;
-
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  scroll-snap-type: none;
-  scroll-behavior: auto;
-
-  /*
-   * Stops the browser from compensating the
-   * position while the loop rebase happens.
-   */
-  overflow-anchor: none;
-
-  -webkit-overflow-scrolling: touch;
-}
-
-
-/* =========================================================
-   BACKGROUND
-   ========================================================= */
-
 .sponsi-background {
   position: fixed;
-
   inset: 0;
-
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center top;
-
   z-index: 0;
-
   pointer-events: none;
-  user-select: none;
 }
-
-
-/* =========================================================
-   DECORATION LAYER
-   ========================================================= */
 
 .sponsi-decoration-layer {
   position: fixed;
-
   inset: 0;
-
   z-index: 1;
-
   pointer-events: none;
 }
-
 
 /* =========================================================
-   FIXED HEADER
+   SCROLLABLE CONTENT LAYER
    ========================================================= */
-
-.sponsi-fixed-header {
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 100;
-
-  pointer-events: none;
+.sponsi-scroll-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100vh;
+  padding-top: var(--nav-h);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  scrollbar-width: none; 
 }
 
+.sponsi-scroll-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================================================
+   HEADER BANNER
+   ========================================================= */
 .sponsi-header-banner {
-  position: absolute;
-
-  top: var(--nav-h);
-  left: 50%;
-
-  translate: -50% 0;
-
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
-  width:
-    calc(
-      var(--banner-w) *
-      var(--sp-k)
-    );
-
-  pointer-events: none;
+  width: clamp(250px, 35vw, 460px);
+  margin: 20px 0 30px 0;
+  flex-shrink: 0;
 }
 
 .sponsi-header-banner > img {
   display: block;
-
   width: 100%;
   height: auto;
-
   object-fit: contain;
-
   user-select: none;
-  pointer-events: none;
 }
-
-
-/* =========================================================
-   SPONSOR HEADING
-   ========================================================= */
 
 .sponsor-heading {
   pointer-events: auto !important;
-
   cursor: pointer;
-
   transition: filter 0.35s ease;
-
-  filter:
-    drop-shadow(
-      0 0 5px
-      rgba(255, 235, 180, 0.45)
-    )
-    drop-shadow(
-      0 0 12px
-      rgba(255, 210, 100, 0.25)
-    );
+  filter: drop-shadow(0 0 5px rgba(255, 235, 180, 0.45)) drop-shadow(0 0 12px rgba(255, 210, 100, 0.25));
 }
 
 .sponsor-heading:hover {
-  filter:
-    drop-shadow(
-      0 0 4px
-      rgba(255, 255, 240, 0.95)
-    )
-    drop-shadow(
-      0 0 9px
-      rgba(255, 245, 190, 0.8)
-    )
-    drop-shadow(
-      0 0 17px
-      rgba(255, 220, 110, 0.6)
-    )
-    drop-shadow(
-      0 0 28px
-      rgba(255, 190, 70, 0.35)
-    );
+  filter: drop-shadow(0 0 4px rgba(255, 255, 240, 0.95)) 
+          drop-shadow(0 0 9px rgba(255, 245, 190, 0.8)) 
+          drop-shadow(0 0 17px rgba(255, 220, 110, 0.6)) 
+          drop-shadow(0 0 28px rgba(255, 190, 70, 0.35));
 }
 
+/* =========================================================
+   THE SPONSORS GRID (Itinerary Style)
+   ========================================================= */
+.sponsi-grid-container {
+  width: 90%;
+  max-width: 1200px;
+  margin-bottom: 60px;
+  
+  /* Itinerary Style Glassmorphism */
+  background: rgba(15, 5, 20, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
+  border: 1px solid #e6daad;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(184, 115, 51, 0.1);
+  
+  /* Flexible Auto-Fill Grid Layout */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 30px;
+}
+
+.sponsi-grid-cell {
+  position: relative;
+  /* flex: 1 1 250px means it will expand to fill the row perfectly, 
+     with a minimum preferred width of 250px before wrapping */
+  flex: 1 1 250px; 
+  min-height: 180px;
+  
+  border-radius: 8px;
+  overflow: hidden;
+  
+  /* Itinerary Cell Styling */
+  border: 1px solid rgba(230, 218, 173, 0.3);
+  background: linear-gradient(145deg, rgba(20, 10, 25, 0.8) 0%, rgba(10, 5, 15, 0.9) 100%);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* 🟢 TITLE SPONSOR SPECIFIC OVERRIDE */
+.title-sponsor-cell {
+  flex: 1 1 100%; /* Forces the card to take up the entire row */
+  min-height: 250px;
+  background: linear-gradient(145deg, rgba(30, 15, 35, 0.9) 0%, rgba(15, 5, 20, 0.95) 100%);
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+}
+
+/* Content Container Inside Each Cell */
+.sponsi-cell-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 25px 20px;
+  gap: 15px; /* Space between logo and text */
+}
+
+/* Hover effect copying the Itinerary row hover glow */
+.sponsi-grid-cell:hover {
+  transform: scale(1.02);
+  z-index: 5;
+  border-color: #e6daad;
+  background: radial-gradient(circle at center, rgba(10,5,15,0.7) 0%, rgba(20,10,25,0.85) 100%);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), inset 0 0 15px rgba(212, 175, 55, 0.4);
+}
+
+.sponsi-logo-img {
+  width: auto;
+  max-width: 85%;
+  max-height: 90px;
+  object-fit: contain;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.8));
+}
+
+.title-sponsor-cell .sponsi-logo-img {
+  max-height: 140px; /* Makes Title Sponsor image larger */
+}
+
+.sponsi-grid-cell:hover .sponsi-logo-img {
+  transform: scale(1.1);
+}
+
+/* 🟢 SPONSOR TEXT TITLES */
+.sponsi-logo-title {
+  margin: 0;
+  color: #e6daad;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+  font-style: italic;
+  text-shadow: 0px 2px 4px rgba(0,0,0,1), 0px 0px 10px rgba(0,0,0,0.8);
+}
+
+.title-sponsor-cell .sponsi-logo-title {
+  font-size: 1.35rem;
+  color: #fff;
+  font-style: normal;
+  font-weight: bold;
+  letter-spacing: 4px;
+  text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+}
+
+/* Noise overlay from the Itinerary row */
+.sponsi-noise-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2; 
+  opacity: 0.15;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
 
 /* =========================================================
    DANGLERS
    ========================================================= */
-
 .dangler-cluster {
   position: fixed;
-
   top: 0;
-
-  width:
-    calc(
-      var(--cluster-w) *
-      var(--sp-k)
-    );
-
-  /*
-   * Only allow the bottom 3/5 to be visible.
-   */
+  width: clamp(120px, 15vw, 210px);
   height: 60%;
-
   overflow: hidden;
 }
 
-.left-cluster {
-  left:
-    calc(
-      166 *
-      var(--sp-k)
-    );
-}
-
-.right-cluster {
-  right:
-    calc(
-      166 *
-      var(--sp-k)
-    );
-
-  transform: scaleX(-1);
-}
+.left-cluster { left: 5vw; }
+.right-cluster { right: 5vw; transform: scaleX(-1); }
 
 .dangler-top-wrapper {
   position: absolute;
-
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: 60%;
-
-  overflow: hidden;
-
-  z-index: 2;
+  top: 0; left: 0;
+  width: 100%; height: 60%;
+  overflow: hidden; z-index: 2;
 }
 
 .dangler-top {
   position: absolute;
-
-  top: -40%;
-  left: 0;
-
+  top: -40%; left: 0;
   display: block;
-
-  width: 110%;
-  height: auto;
-
-  /*
-   * Spins around its own centre,
-   * which sits off-screen above the viewport.
-   *
-   * Position, size and orientation stay
-   * untouched: rotation happens after
-   * layout, and starts at 0deg.
-   */
+  width: 110%; height: auto;
   transform-origin: 50% 50%;
-
-  animation:
-    danglerTopSpin
-    20s
-    linear
-    infinite;
-
+  animation: danglerTopSpin 20s linear infinite;
   z-index: 3;
 }
 
 @keyframes danglerTopSpin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .dangler-row {
   position: absolute;
-
-  top: 0;
-  left: 0;
-
+  top: 0; left: 0;
   width: 100%;
-
   display: flex;
-
   align-items: flex-start;
   justify-content: center;
-
   z-index: 2;
 }
 
 .dangler {
   transform-origin: 50% 0%;
-
   min-width: 0;
 }
 
 .dangler img {
   display: block;
-
-  width: 100%;
-  height: 100%;
-
+  width: 100%; height: 100%;
   object-fit: fill;
-
   user-select: none;
 }
 
 .dangler-row .dangler:nth-child(1) {
   flex: 159 1 0;
-
-  height:
-    calc(
-      371 *
-      var(--sp-k)
-    );
-
-  animation:
-    sway1
-    4.8s
-    ease-in-out
-    infinite;
+  height: clamp(200px, 25vw, 371px);
+  animation: sway1 4.8s ease-in-out infinite;
 }
 
 .dangler-row .dangler:nth-child(2) {
   flex: 391 1 0;
-
-  height:
-    calc(
-      296 *
-      var(--sp-k)
-    );
-
-  animation:
-    sway2
-    5.6s
-    ease-in-out
-    infinite;
+  height: clamp(160px, 20vw, 296px);
+  animation: sway2 5.6s ease-in-out infinite;
 }
 
 .dangler-row .dangler:nth-child(3) {
   flex: 154 1 0;
-
-  height:
-    calc(
-      199 *
-      var(--sp-k)
-    );
-
-  animation:
-    sway3
-    4.2s
-    ease-in-out
-    infinite;
+  height: clamp(110px, 15vw, 199px);
+  animation: sway3 4.2s ease-in-out infinite;
 }
 
-
-/* =========================================================
-   DANGLER ANIMATIONS
-   ========================================================= */
-
-@keyframes sway1 {
-  0%,
-  100% {
-    transform: rotate(-2deg);
-  }
-
-  50% {
-    transform: rotate(2.2deg);
-  }
-}
-
-@keyframes sway2 {
-  0%,
-  100% {
-    transform: rotate(1deg);
-  }
-
-  50% {
-    transform: rotate(-2.4deg);
-  }
-}
-
-@keyframes sway3 {
-  0%,
-  100% {
-    transform: rotate(-1.2deg);
-  }
-
-  50% {
-    transform: rotate(2.8deg);
-  }
-}
-
+@keyframes sway1 { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2.2deg); } }
+@keyframes sway2 { 0%, 100% { transform: rotate(1deg); } 50% { transform: rotate(-2.4deg); } }
+@keyframes sway3 { 0%, 100% { transform: rotate(-1.2deg); } 50% { transform: rotate(2.8deg); } }
 
 /* =========================================================
    MANDALA
    ========================================================= */
-
 .mandala-bottom,
 .mandala-top {
   position: fixed;
-
-  /*
-   * Percentage of the viewport width.
-   *
-   * No vw, no vh, no --sp-k.
-   */
   width: 26%;
-
   height: auto;
-
   transform-origin: 50% 50%;
-
-  /*
-   * BOTTOM-MOST LAYER.
-   *
-   * 0 = mandala
-   * 2 = dangler 1, 2, 3
-   * 3 = dangler top
-   */
   z-index: 0;
-
   pointer-events: none;
   user-select: none;
 }
 
-.mandala-bottom {
-  top: 100%;
-}
+.mandala-bottom { top: 100%; }
+.mandala-top { top: 0; }
 
-.mandala-top {
-  top: 0;
-}
+.gear-spin-left { left: 0; translate: -50% -50%; animation: gearSpinCW 14s linear infinite; }
+.gear-spin-right { right: 0; translate: 50% -50%; animation: gearSpinCCW 14s linear infinite; }
 
-.gear-spin-left {
-  left: 0;
-
-  translate: -50% -50%;
-
-  animation:
-    gearSpinCW
-    14s
-    linear
-    infinite;
-}
-
-.gear-spin-right {
-  right: 0;
-
-  translate: 50% -50%;
-
-  animation:
-    gearSpinCCW
-    14s
-    linear
-    infinite;
-}
-
-@keyframes gearSpinCW {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes gearSpinCCW {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(-360deg);
-  }
-}
-
+@keyframes gearSpinCW { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes gearSpinCCW { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
 
 /* =========================================================
-   ONE CYCLE
-
-   The sections are rendered twice. Both copies are
-   pixel identical, which lets the scroll position be
-   moved by one full cycle without anything on screen
-   changing, so the carousel can loop forever.
+   MOBILE RESPONSIVENESS
    ========================================================= */
-
-.sponsi-cycle {
-  position: relative;
-
-  width: 100%;
-  height: auto;
-}
-
-.sponsi-cycle-clone {
-  /*
-   * No extra gap, the second copy has to start exactly
-   * where the first one ends.
-   */
-  margin: 0;
-  padding: 0;
-}
-
-
-/* =========================================================
-   SPONSOR PAGE
-   ========================================================= */
-
-.sponsi-page {
-  position: relative;
-
-  z-index: 2;
-
-  min-height: 100%;
-
-  height: auto;
-}
-
-
-/* =========================================================
-   DESKTOP SECTIONS
-   ========================================================= */
-
-.sponsor-section {
-  position: relative;
-
-  width: 100%;
-
-  /*
-   * Every section fills the viewport, so one full cycle
-   * is always taller than the scroll container.
-   */
-  min-height:
-    max(
-      calc(
-        760 *
-        var(--sp-k)
-      ),
-      100vh
-    );
-
-  height: auto;
-
-  padding-top:
-    calc(
-      140 *
-      var(--sp-k)
-    );
-
-  box-sizing: border-box;
-}
-
-.sponsors-layout {
-  position: relative;
-
-  width: 100%;
-  height: 100%;
-
-  z-index: 8;
-
-  display: flex;
-
-  align-items: flex-start;
-  justify-content: center;
-
-  gap:
-    calc(
-      28 *
-      var(--sp-k)
-    );
-}
-
-
-/* =========================================================
-   TREE NODE
-   ========================================================= */
-
-.tree-node {
-  position: relative;
-
-  width: 100%;
-
-  height:
-    calc(
-      600 *
-      var(--sp-k)
-    );
-
-  margin: 0 auto;
-}
-
-
-/* =========================================================
-   SPONSOR CARD
-   ========================================================= */
-
-.sponsor-card {
-  position: absolute;
-
-  flex: 0 0 auto;
-
-  height:
-    calc(
-      var(--ch) *
-      var(--sp-k)
-    );
-
-  aspect-ratio: var(--car);
-
-  transform-origin: center top;
-
-  box-sizing: border-box;
-}
-
-
-/* =========================================================
-   CARD SIZES
-   ========================================================= */
-
-.title-card {
-  --ch: 280;
-  --car: 1600 / 1200;
-}
-
-.gold-card {
-  --ch: 240;
-  --car: 1000 / 1200;
-}
-
-.silver-card {
-  --ch: 270;
-  --car: 1001 / 1200;
-}
-
-.bronze-card {
-  --ch: 290;
-  --car: 999 / 1200;
-}
-
-.category-card {
-  --ch: 250;
-  --car: 1000 / 1200;
-}
-
-
-/* =========================================================
-   TITLE + GOLD DESKTOP
-   ========================================================= */
-
-.section-title-gold .tree-node {
-  height:
-    clamp(
-      400px,
-      calc(
-        40.36 *
-        var(--sp-k)
-      ),
-      620px
-    );
-}
-
-.section-title-gold .sponsor-card {
-  position: absolute;
-}
-
-.section-title-gold
-.sponsor-card.pos-center {
-  top: 33%;
-
-  left: 50.5%;
-
-  transform:
-    translateX(-50%);
-}
-
-.section-title-gold
-.sponsor-card.pos-left {
-  top: 85%;
-
-  left: 29.3%;
-
-  transform:
-    translateX(-50%);
-}
-
-.section-title-gold
-.sponsor-card.pos-right {
-  top: 85%;
-
-  left: 70.7%;
-
-  transform:
-    translateX(-50%);
-}
-
-
-/* =========================================================
-   SILVER DESKTOP
-   ========================================================= */
-
-.section-title-silver .tree-node {
-  height:
-    calc(
-      580 *
-      var(--sp-k)
-    );
-}
-
-.section-title-silver
-.sponsor-card.pos-node-1 {
-  top:
-    calc(
-      140 *
-      var(--sp-k)
-    );
-
-  left: 25%;
-
-  transform:
-    translateX(-50%);
-}
-
-.section-title-silver
-.sponsor-card.pos-node-2 {
-  top:
-    calc(
-      280 *
-      var(--sp-k)
-    );
-
-  left: 50.5%;
-
-  transform:
-    translateX(-50%);
-}
-
-.section-title-silver
-.sponsor-card.pos-node-3 {
-  top:
-    calc(
-      140 *
-      var(--sp-k)
-    );
-
-  left: 75%;
-
-  transform:
-    translateX(-50%);
-}
-
-
-/* =========================================================
-   BRONZE DESKTOP
-   ========================================================= */
-
-.section-title-bronze .tree-node {
-  height:
-    calc(
-      620 *
-      var(--sp-k)
-    );
-}
-
-.section-title-bronze
-.sponsor-card.pos-node-1 {
-  top:
-    calc(
-      120 *
-      var(--sp-k)
-    );
-
-  left: 20%;
-
-  transform:
-    translateX(-50%);
-}
-
-.section-title-bronze
-.sponsor-card.pos-node-2 {
-  top:
-    calc(
-      280 *
-      var(--sp-k)
-    );
-
-  left: 50.5%;
-
-  transform:
-    translateX(-50%);
-}
-
-.section-title-bronze
-.sponsor-card.pos-node-3 {
-  top:
-    calc(
-      120 *
-      var(--sp-k)
-    );
-
-  left: 80%;
-
-  transform:
-    translateX(-50%);
-}
-
-
-/* =========================================================
-   CATEGORY DESKTOP
-   ========================================================= */
-
-.section-title-category .tree-node {
-  height:
-    calc(
-      680 *
-      var(--sp-k)
-    );
-}
-
-.section-title-category
-.sponsor-card.pos-node-1 {
-  top:
-    calc(
-      100 *
-      var(--sp-k)
-    );
-
-  left: 15%;
-
-  transform:
-    translateX(-50%);
-}
-
-.section-title-category
-.sponsor-card.pos-node-2 {
-  top:
-    calc(
-      220 *
-      var(--sp-k)
-    );
-
-  left: 30%;
-
-  transform:
-    translateX(-50%);
-}
-
-.section-title-category
-.sponsor-card.pos-node-3 {
-  top:
-    calc(
-      340 *
-      var(--sp-k)
-    );
-
-  left: 50.5%;
-
-  transform:
-    translateX(-50%);
-}
-
-.section-title-category
-.sponsor-card.pos-node-4 {
-  top:
-    calc(
-      220 *
-      var(--sp-k)
-    );
-
-  left: 70%;
-
-  transform:
-    translateX(-50%);
-}
-
-.section-title-category
-.sponsor-card.pos-node-5 {
-  top:
-    calc(
-      100 *
-      var(--sp-k)
-    );
-
-  left: 85%;
-
-  transform:
-    translateX(-50%);
-}
-
-
-/* =========================================================
-   GLOW
-   ========================================================= */
-
-.sponsor-glow {
-  position: absolute;
-
-  left: 50%;
-  top: 50%;
-
-  width: 78%;
-  height: 78%;
-
-  translate: -50% -50%;
-
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(255, 206, 111, 0.25),
-      rgba(184, 73, 255, 0.12) 35%,
-      transparent 72%
-    );
-
-  filter: blur(18px);
-
-  z-index: -2;
-
-  pointer-events: none;
-}
-
-
-/* =========================================================
-   FRAME
-   ========================================================= */
-
-.sponsor-frame {
-  position: absolute;
-
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  object-fit: contain;
-
-  z-index: 2;
-
-  user-select: none;
-
-  filter:
-    drop-shadow(
-      0 0 7px
-      rgba(255, 193, 95, 0.2)
-    );
-}
-
-
-/* =========================================================
-   LOGO
-   ========================================================= */
-
-.sponsor-logo {
-  position: absolute;
-
-  z-index: 4;
-
-  height: auto;
-
-  object-fit: contain;
-
-  pointer-events: none;
-  user-select: none;
-}
-
-.title-card .sponsor-logo {
-  width: 11%;
-
-  left: 44.5%;
-  top: 35.5%;
-}
-
-.gold-card .sponsor-logo {
-  width: 21%;
-
-  left: 39%;
-  top: 32.5%;
-}
-
-.silver-card .sponsor-logo {
-  width: 21%;
-
-  left: 39%;
-  top: 33%;
-}
-
-.bronze-card .sponsor-logo {
-  width: 21.5%;
-
-  left: 39%;
-  top: 32%;
-}
-
-.category-card .sponsor-logo {
-  width: 24%;
-
-  left: 37.5%;
-  top: 31%;
-}
-
-
-/* =========================================================
-   HOVER
-   ========================================================= */
-
-.sponsor-card:hover {
-  z-index: 20;
-}
-
-.sponsor-card:hover
-.sponsor-frame {
-  filter:
-    drop-shadow(
-      0 0 10px
-      rgba(255, 218, 135, 0.42)
-    )
-    drop-shadow(
-      0 0 24px
-      rgba(176, 70, 255, 0.35)
-    );
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 900px) {
-
-  /* -------------------------------------------------------
-     MOBILE SCALE
-     ------------------------------------------------------- */
-
-  .sponsi-container {
-
-    /*
-     * Mobile uses the original pixel sizes.
-     * 1px keeps calc(number * --sp-k) valid.
-     */
-    --sp-k: 1px;
-
-    --banner-w: 330;
-    --cluster-w: 90;
+@media (max-width: 768px) {
+  .sponsi-grid-container {
+    width: 95%;
+    padding: 15px;
+    gap: 15px;
+  }
+  
+  .sponsi-grid-cell {
+    flex: 1 1 100%; /* Forces standard cards into a single column so text is readable */
+    min-height: 140px;
   }
 
-
-  /* -------------------------------------------------------
-     SCROLL
-     ------------------------------------------------------- */
-
-  .sponsi-scroll {
-    position: relative;
-
-    width: 100%;
-    height: 100%;
-
-    overflow-x: hidden;
-    overflow-y: auto;
-
-    scroll-snap-type: none;
-
-    scroll-behavior: auto;
-
-    -webkit-overflow-scrolling: touch;
+  .sponsi-cell-content {
+    padding: 15px;
+  }
+  
+  .sponsi-logo-img {
+    max-height: 80px;
   }
 
-
-  /* -------------------------------------------------------
-     ONE CONTINUOUS PAGE
-     ------------------------------------------------------- */
-
-  .sponsi-page {
-    position: relative;
-
-    z-index: 10;
-
-    width: 100%;
-
-    min-height: 100%;
-    height: auto;
-
-    padding:
-      0
-      0
-      120px
-      0;
+  .sponsi-logo-title {
+    font-size: 0.9rem;
   }
 
-
-  /* -------------------------------------------------------
-     EVERY SECTION
-     ------------------------------------------------------- */
-
-  .sponsor-section {
-    position: relative;
-
-    z-index: 10;
-
-    width: 100%;
-
-    min-height: 0;
-    height: auto;
-
-    padding-top: 180px;
-    padding-bottom: 80px;
-
-    box-sizing: border-box;
+  .title-sponsor-cell {
+    min-height: 180px;
   }
 
-
-  /* -------------------------------------------------------
-     REMOVE DESKTOP TREE LAYOUT
-     ------------------------------------------------------- */
-
-  .sponsors-layout,
-  .tree-node {
-    position: relative;
-
-    width: 100%;
-
-    height: auto;
-    min-height: 0;
-
-    margin: 0;
-
-    display: grid;
-
-    z-index: 20;
-
-    box-sizing: border-box;
+  .title-sponsor-cell .sponsi-logo-img {
+    max-height: 110px; 
   }
 
-
-  /* -------------------------------------------------------
-     MOBILE CARD RESET
-     ------------------------------------------------------- */
-
-  .sponsor-card {
-    position: relative !important;
-
-    top: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    left: auto !important;
-
-    transform: none !important;
-
-    z-index: 30;
-
-    justify-self: center;
-
-    visibility: visible !important;
-
-    opacity: 1 !important;
-
-    max-width: 100%;
-
-    box-sizing: border-box;
+  .title-sponsor-cell .sponsi-logo-title {
+    font-size: 1.15rem;
   }
 
-
-  .sponsor-frame {
-    visibility: visible !important;
-
-    opacity: 1 !important;
-  }
-
-  .sponsor-logo {
-    visibility: visible !important;
-
-    opacity: 1 !important;
-  }
-
-
-  /* =======================================================
-     TITLE + GOLD
-     ======================================================= */
-
-  .section-title-gold .tree-node {
-
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(0, 1fr)
-      );
-
-    gap:
-      30px
-      8px;
-
-    padding:
-      0
-      8px
-      30px;
-  }
-
-
-  .section-title-gold
-  .title-card {
-
-    grid-column: 1 / -1;
-
-    grid-row: 1;
-
-    justify-self: center;
-
-    margin-bottom: 10px;
-
-    width:
-      min(
-        calc(100% - 20px),
-        300px
-      );
-
-    height: auto;
-  }
-
-
-  .section-title-gold
-  .gold-card.pos-left {
-
-    grid-column: 1;
-
-    grid-row: 2;
-
-    width:
-      min(
-        calc(100% - 8px),
-        180px
-      );
-
-    height: auto;
-  }
-
-
-  .section-title-gold
-  .gold-card.pos-right {
-
-    grid-column: 2;
-
-    grid-row: 2;
-
-    width:
-      min(
-        calc(100% - 8px),
-        180px
-      );
-
-    height: auto;
-  }
-
-
-  /* =======================================================
-     SILVER
-     ======================================================= */
-
-  .section-title-silver .tree-node {
-
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(0, 1fr)
-      );
-
-    gap:
-      30px
-      8px;
-
-    padding:
-      0
-      8px
-      30px;
-  }
-
-
-  .section-title-silver
-  .sponsor-card {
-
-    width:
-      min(
-        calc(100% - 8px),
-        180px
-      );
-
-    height: auto;
-  }
-
-
-  .section-title-silver
-  .pos-node-1 {
-
-    grid-column: 1;
-
-    grid-row: 1;
-  }
-
-
-  .section-title-silver
-  .pos-node-2 {
-
-    grid-column: 2;
-
-    grid-row: 1;
-  }
-
-
-  .section-title-silver
-  .pos-node-3 {
-
-    grid-column: 1 / -1;
-
-    grid-row: 2;
-  }
-
-
-  /* =======================================================
-     BRONZE
-     ======================================================= */
-
-  .section-title-bronze .tree-node {
-
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(0, 1fr)
-      );
-
-    gap:
-      30px
-      8px;
-
-    padding:
-      0
-      8px
-      30px;
-  }
-
-
-  .section-title-bronze
-  .sponsor-card {
-
-    width:
-      min(
-        calc(100% - 8px),
-        185px
-      );
-
-    height: auto;
-  }
-
-
-  .section-title-bronze
-  .pos-node-1 {
-
-    grid-column: 1;
-
-    grid-row: 1;
-  }
-
-
-  .section-title-bronze
-  .pos-node-2 {
-
-    grid-column: 2;
-
-    grid-row: 1;
-  }
-
-
-  .section-title-bronze
-  .pos-node-3 {
-
-    grid-column: 1 / -1;
-
-    grid-row: 2;
-  }
-
-
-  /* =======================================================
-     CATEGORY
-     ======================================================= */
-
-  .section-title-category .tree-node {
-
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(0, 1fr)
-      );
-
-    gap:
-      30px
-      8px;
-
-    padding:
-      0
-      8px
-      30px;
-  }
-
-
-  .section-title-category
-  .sponsor-card {
-
-    width:
-      min(
-        calc(100% - 8px),
-        180px
-      );
-
-    height: auto;
-  }
-
-
-  .section-title-category
-  .pos-node-1 {
-
-    grid-column: 1;
-
-    grid-row: 1;
-  }
-
-
-  .section-title-category
-  .pos-node-2 {
-
-    grid-column: 2;
-
-    grid-row: 1;
-  }
-
-
-  .section-title-category
-  .pos-node-3 {
-
-    grid-column: 1;
-
-    grid-row: 2;
-  }
-
-
-  .section-title-category
-  .pos-node-4 {
-
-    grid-column: 2;
-
-    grid-row: 2;
-  }
-
-
-  .section-title-category
-  .pos-node-5 {
-
-    grid-column: 1 / -1;
-
-    grid-row: 3;
-  }
-
-
-  /* =======================================================
-     MOBILE CARD HEIGHTS
-     ======================================================= */
-
-  .title-card {
-    --ch: 170;
-  }
-
-  .gold-card {
-    --ch: 150;
-  }
-
-  .silver-card {
-    --ch: 155;
-  }
-
-  .bronze-card {
-    --ch: 165;
-  }
-
-  .category-card {
-    --ch: 150;
-  }
-
-
-  /* =======================================================
-     MOBILE HEADER
-     ======================================================= */
-
-  .sponsi-fixed-header {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 100;
-
-    pointer-events: none;
-  }
-
-  .sponsi-header-banner {
-
-    top:
-      calc(
-        var(--nav-h) *
-        0.85
-      );
-
-    width:
-      min(
-        calc(
-          var(--banner-w) *
-          var(--sp-k)
-        ),
-        70%
-      );
-  }
-
-
-  /* =======================================================
-     MOBILE DECORATIONS
-     ======================================================= */
-
-  .sponsi-decoration-layer {
-    z-index: 1;
-
-    pointer-events: none;
-  }
-
-
-  .mandala-bottom,
-  .mandala-top {
+  .mandala-bottom, .mandala-top {
     width: 48%;
   }
 
-
-  .left-cluster {
-    left: 15px;
-  }
-
-  .right-cluster {
-    right: 15px;
-  }
-}
-
-
-/* =========================================================
-   VERY WIDE DESKTOP
-   ========================================================= */
-
-@media (min-width: 2200px) {
-
-  .sponsi-container {
-
-    /*
-     * Original behavior:
-     * --sp-k: 1.4
-     *
-     * Keep the same 1.4x scale, but as a length.
-     */
-    --sp-k: 1.4px;
-  }
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 420px) {
-
-  .sponsor-section {
-    padding-top: 155px;
-    padding-bottom: 65px;
-  }
-
-  .section-title-gold .tree-node,
-  .section-title-silver .tree-node,
-  .section-title-bronze .tree-node,
-  .section-title-category .tree-node {
-    gap: 22px 5px;
-    padding-left: 5px;
-    padding-right: 5px;
-  }
-
-  .section-title-gold
-  .title-card {
-    width:
-      min(
-        calc(100% - 10px),
-        280px
-      );
-  }
-
-  .section-title-gold
-  .gold-card.pos-left,
-  .section-title-gold
-  .gold-card.pos-right {
-    width:
-      min(
-        calc(100% - 4px),
-        160px
-      );
-  }
-
-  .section-title-silver
-  .sponsor-card,
-  .section-title-bronze
-  .sponsor-card,
-  .section-title-category
-  .sponsor-card {
-    width:
-      min(
-        calc(100% - 4px),
-        165px
-      );
-  }
-}
-
-
-/* =========================================================
-   LANDSCAPE PHONES / SMALL TABLETS
-   ========================================================= */
-
-@media (min-width: 901px) and (max-height: 700px) {
-
-  .sponsor-section {
-    padding-top:
-      calc(
-        110 *
-        var(--sp-k)
-      );
-  }
+  .left-cluster { left: -10px; }
+  .right-cluster { right: -10px; }
 }

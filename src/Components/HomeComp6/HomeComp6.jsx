@@ -11,8 +11,8 @@ import wheel9 from '../../assets/wheel9.webp';
 
 const questions = [
   {
-    q: "When and where is Etherea happening?",
-    a: "Etherea takes over the IGDTUW campus on 18-19 March, 2026. Gates open at 11 AM and the fest runs till around 8:30 PM each day."
+    q: "When and where is Taarangana happening?",
+    a: "Taarangana takes over the IGDTUW campus on 22-23 October, 2026. Gates open at 11 AM and the fest runs till around 8:30 PM each day."
   },
   {
     q: "How do I register for competitions?",
@@ -24,11 +24,11 @@ const questions = [
   },
   {
     q: "What’s the vibe for outfits?",
-    a: "Lean into the Etherea energy: colourful, celestial, dramatic, a little theatrical."
+    a: "Lean into the Navrasa energy: colourful, celestial, dramatic, a little theatrical."
   },
   {
     q: "What am I allowed to bring inside?",
-    a: "Travel light. Only essentials like your phone, wallet and small clutches are allowed. Large bags and outside food or drinks (yes, even water bottles) won’t be permitted inside the venue."
+    a: "Travel light. Only essentials like your phone, wallet and small purses are allowed. Large bags and outside food or drinks (yes, even water bottles) won’t be permitted inside the venue."
   },
   {
     q: "Can students from other colleges attend?",

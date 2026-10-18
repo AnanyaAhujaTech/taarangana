@@ -13,6 +13,16 @@ html, body {
   scroll-snap-type: y mandatory;
   background-color: #0b0b0e;
   color: #ffffff;
+  /* Enforce standard modern sans-serif stack */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.event-detail-page::-webkit-scrollbar {
+  display: none;
 }
 
 /* Fixed Parallax Background Container */
@@ -119,15 +129,19 @@ html, body {
   font-size: 0.85rem;
 }
 
-/* Center Title Badge */
+/* Left-Aligned Title Badge */
 .event-title-badge-container {
-  align-self: center;
-  text-align: center;
+  align-self: flex-start;
+  text-align: left;
   background: rgba(10, 15, 20, 0.65);
   backdrop-filter: blur(12px);
   padding: 1.2rem 3rem;
   border-radius: 16px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+  
+  /* 🟢 Pushes the box all the way down, leaving a tight gap above the panel */
+  margin-top: auto; 
+  margin-bottom: 1.5rem; 
 }
 
 .event-badge-label {
@@ -195,6 +209,12 @@ html, body {
   margin: 0.3rem 0 0 0;
   max-height: 100px;
   overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.event-preview-pre::-webkit-scrollbar {
+  display: none;
 }
 
 .register-btn-disabled {
@@ -231,6 +251,12 @@ html, body {
   box-shadow: 0 20px 50px rgba(0,0,0,0.8);
   max-height: 80vh;
   overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.event-detailed-info-inner::-webkit-scrollbar {
+  display: none;
 }
 
 .event-detailed-info-inner h2 {
@@ -247,7 +273,7 @@ html, body {
   line-height: 1.7;
 }
 
-/* Glowing Border Card Style (matching image style) */
+/* Glowing Border Card Style */
 .event-card {
   position: relative;
   background: rgba(10, 15, 20, 0.75);
@@ -260,4 +286,52 @@ html, body {
 .event-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 0 25px var(--rasa-color, rgba(255, 255, 255, 0.4));
+}
+
+.event-markdown-content {
+  color: #e5e5e5;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.event-markdown-content h2 {
+  color: var(--rasa-color, #55e6d1);
+  font-size: 1.4rem;
+  margin: 2rem 0 0.8rem;
+}
+
+.event-markdown-content h3 {
+  color: var(--rasa-color, #55e6d1);
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.6rem;
+}
+
+.event-markdown-content p {
+  margin: 0.6rem 0 1rem;
+}
+
+.event-markdown-content ul,
+.event-markdown-content ol {
+  padding-left: 1.6rem;
+  margin: 0.6rem 0 1.2rem;
+}
+
+.event-markdown-content li {
+  margin-bottom: 0.55rem;
+  padding-left: 0.2rem;
+}
+
+.event-markdown-content strong {
+  color: #fff;
+}
+
+.event-markdown-content a {
+  color: var(--rasa-color, #55e6d1);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.event-markdown-content a:hover {
+  opacity: 0.8;
 }

@@ -15,6 +15,8 @@ import imgAdvisorPhoto from "../../assets/advisor.webp";
 import imgAdvisorPlate from "../../assets/advisorp.webp";
 import imgAsdwPhoto from "../../assets/asdw.webp";
 import imgAsdwPlate from "../../assets/asdwp.webp";
+import imgAnkushPhoto from "../../assets/ankush.webp"; 
+import imgAnkushPlate from "../../assets/ankushp.webp";
 import imgCoordinatorPhoto from "../../assets/coordinator.webp";
 import imgCoordinatorPlate from "../../assets/coordinatorp.webp";
 
@@ -35,7 +37,7 @@ const GlitterParticle = ({ x, y, size, color, delay }) => {
   );
 };
 
-const MemberCard = ({ photo, plate, name, delay, isParentVisible }) => {
+const MemberCard = ({ photo, plate, name, index, delay, isParentVisible }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [rotate, setRotate] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
@@ -50,7 +52,6 @@ const MemberCard = ({ photo, plate, name, delay, isParentVisible }) => {
     const x = (clientX - left - width / 2) / 25;
     const y = -(clientY - top - height / 2) / 25;
     
-    // Disable heavy 3D rotation when in carousel mode to prevent swipe jitter
     if (window.innerWidth > 1400) {
       setRotate({ x: y, y: x });
     }
@@ -65,7 +66,10 @@ const MemberCard = ({ photo, plate, name, delay, isParentVisible }) => {
     <div
       ref={cardRef}
       className={`homecomp4-card-outer ${isParentVisible ? "is-visible" : ""}`}
-      style={{ transitionDelay: `${delay}s` }}
+      style={{ 
+        transitionDelay: `${delay}s`,
+        "--card-index": index 
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseMove={handleInteractionMove}
       onMouseLeave={handleInteractionEnd}
@@ -74,31 +78,33 @@ const MemberCard = ({ photo, plate, name, delay, isParentVisible }) => {
       onTouchEnd={handleInteractionEnd}
       onTouchCancel={handleInteractionEnd}
     >
-      <div
-        className={`homecomp4-card-visual ${isHovered ? "is-hovered" : ""}`}
-        style={{
-          transform: `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale(${isHovered ? 1.05 : 1})`,
-        }}
-      >
-        <div className="homecomp4-solid-bg" />
+      <div className="homecomp4-card-wave">
         <div
-          className="homecomp4-embroidery-layer"
-          style={{ backgroundImage: `url(${imgEmbroidery})` }}
-        />
-        <div className="homecomp4-assembly">
-          <div className="homecomp4-frame-container">
-            <div className="homecomp4-photo-clip">
-              <img
-                src={photo}
-                alt={name}
-                className="homecomp4-member-photo"
-                style={{ transform: isHovered ? "scale(1.15)" : "scale(1)" }}
-              />
+          className={`homecomp4-card-visual ${isHovered ? "is-hovered" : ""}`}
+          style={{
+            transform: `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale(${isHovered ? 1.05 : 1})`,
+          }}
+        >
+          <div className="homecomp4-solid-bg" />
+          <div
+            className="homecomp4-embroidery-layer"
+            style={{ backgroundImage: `url(${imgEmbroidery})` }}
+          />
+          <div className="homecomp4-assembly">
+            <div className="homecomp4-frame-container">
+              <div className="homecomp4-photo-clip">
+                <img
+                  src={photo}
+                  alt={name}
+                  className="homecomp4-member-photo"
+                  style={{ transform: isHovered ? "scale(1.15)" : "scale(1)" }}
+                />
+              </div>
+              <img src={imgFrame} alt="Frame" className="homecomp4-frame-img" />
             </div>
-            <img src={imgFrame} alt="Frame" className="homecomp4-frame-img" />
-          </div>
-          <div className="homecomp4-plate-wrapper">
-            <img src={plate} alt={name} className="homecomp4-plate-img" />
+            <div className="homecomp4-plate-wrapper">
+              <img src={plate} alt={name} className="homecomp4-plate-img" />
+            </div>
           </div>
         </div>
       </div>
@@ -109,21 +115,32 @@ const MemberCard = ({ photo, plate, name, delay, isParentVisible }) => {
 export default function HomeComp4() {
   const [isVisible, setIsVisible] = useState(false);
   const [isMouseInside, setIsMouseInside] = useState(false);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
   const [maskPos, setMaskPos] = useState({ x: -1000, y: -9999 }); 
   const [glitter, setGlitter] = useState([]);
+  
   const sectionRef = useRef(null);
+  const gridRef = useRef(null);
 
   const members = [
     { photo: imgDeanPhoto, plate: imgDeanPlate, name: "Dean", delay: 0.1 },
     { photo: imgAdvisorPhoto, plate: imgAdvisorPlate, name: "Advisor", delay: 0.2 },
     { photo: imgAsdwPhoto, plate: imgAsdwPlate, name: "ASDW", delay: 0.3 },
-    { photo: imgCoordinatorPhoto, plate: imgCoordinatorPlate, name: "Coordinator", delay: 0.4 },
+    { photo: imgAnkushPhoto, plate: imgAnkushPlate, name: "Ankush", delay: 0.4 },
+    { photo: imgCoordinatorPhoto, plate: imgCoordinatorPlate, name: "Coordinator", delay: 0.5 },
   ];
 
+  const stopAutoScroll = useCallback(() => setIsAutoScrolling(false), []);
+
+  // 1. Fade-in Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          // Wait 1.5s for the pop-in animation to finish, then start auto-scrolling
+          setTimeout(() => setIsAutoScrolling(true), 1500); 
+        }
       },
       { threshold: 0.1 }
     );
@@ -131,6 +148,50 @@ export default function HomeComp4() {
     return () => observer.disconnect();
   }, []);
 
+  // 2. The Auto-Scroll Logic
+  useEffect(() => {
+    if (!isAutoScrolling || !gridRef.current) return;
+
+    let animationFrameId;
+    let currentScroll = gridRef.current.scrollLeft;
+    const scrollSpeed = 0.8; // Pixels per frame. Adjust for faster/slower panning.
+
+    const autoScroll = () => {
+      if (gridRef.current && isAutoScrolling) {
+        currentScroll += scrollSpeed;
+        gridRef.current.scrollLeft = currentScroll;
+
+        // Check if we've reached the absolute end of the track
+        if (Math.ceil(gridRef.current.scrollLeft) >= gridRef.current.scrollWidth - gridRef.current.clientWidth) {
+          setIsAutoScrolling(false); // Stop permanently
+          return;
+        }
+        animationFrameId = requestAnimationFrame(autoScroll);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(autoScroll);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isAutoScrolling]);
+
+  // 3. Map vertical wheel scroll to horizontal track movement
+  useEffect(() => {
+    const gridElement = gridRef.current;
+    if (!gridElement) return;
+
+    const handleWheel = (e) => {
+      stopAutoScroll(); // Immediately stop the auto-scroll if user starts scrolling
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        gridElement.scrollLeft += e.deltaY;
+      }
+    };
+
+    gridElement.addEventListener('wheel', handleWheel, { passive: false });
+    return () => gridElement.removeEventListener('wheel', handleWheel);
+  }, [stopAutoScroll]);
+
+  // Handle dynamic spotlight & glitter
   const handleInteractionMove = useCallback((e) => {
     if (!sectionRef.current) return;
     
@@ -164,12 +225,6 @@ export default function HomeComp4() {
       onMouseEnter={() => setIsMouseInside(true)}
       onMouseMove={handleInteractionMove}
       onMouseLeave={() => setIsMouseInside(false)}
-      onTouchStart={(e) => {
-        setIsMouseInside(true);
-        handleInteractionMove(e);
-      }}
-      onTouchMove={handleInteractionMove}
-      onTouchEnd={() => setIsMouseInside(false)}
       style={{ backgroundImage: `url(${imgBack})` }} 
     >
       <div 
@@ -194,9 +249,21 @@ export default function HomeComp4() {
           <img src={imgPatronsHeading} alt="Our Faculty" className="homecomp4-title-img" />
         </header>
 
-        <div className="homecomp4-grid">
+        {/* 🟢 The Grid with Touch/Hover interrupts attached */}
+        <div 
+          ref={gridRef}
+          className={`homecomp4-grid ${!isAutoScrolling ? 'is-snapping' : ''}`}
+          onMouseEnter={stopAutoScroll}
+          onTouchStart={(e) => {
+            setIsMouseInside(true);
+            stopAutoScroll();
+            handleInteractionMove(e);
+          }}
+          onTouchMove={handleInteractionMove}
+          onTouchEnd={() => setIsMouseInside(false)}
+        >
           {members.map((m, idx) => (
-            <MemberCard key={idx} {...m} isParentVisible={isVisible} />
+            <MemberCard key={idx} {...m} index={idx} isParentVisible={isVisible} />
           ))}
         </div>
       </div>

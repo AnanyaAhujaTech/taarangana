@@ -10,18 +10,26 @@ import EventDetailPage from './Components/Events/EventDetailPage';
 
 import './index.css';
 
-// Safely grab the first page without crashing if it doesn't exist yet
+// 1. Existing Team preloader
 const teamAssets = import.meta.glob('./assets/page1.webp', { eager: true, import: 'default' });
+
+// 2. Automatically fetch your Event Thumbnail images (1.png through 9.png)
+const eventThumbnails = import.meta.glob('./assets/[1-9].png', { eager: true, import: 'default' });
 
 function App() {
   useEffect(() => {
-    // 🟢 SILENT PRELOAD: Downloads the first Team page in the background 
-    // as soon as the app opens, so it's instantly cached before they visit the route.
+    // 🟢 PRELOAD TEAM PAGE
     const firstPagePath = Object.keys(teamAssets)[0];
     if (firstPagePath) {
       const img = new Image();
       img.src = teamAssets[firstPagePath];
     }
+
+    // 🟢 SILENT PRELOAD EVENT THUMBNAILS
+    Object.values(eventThumbnails).forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
   }, []);
 
   return (
@@ -30,15 +38,10 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/events" element={<Events />} />
-          
-          {/* 1. Dynamic Event Detail Route */}
           <Route path="/events/:eventId" element={<EventDetailPage />} />
-
           <Route path="/schedule" element={<ItineraryPage />} />
           <Route path="/sponsi" element={<Sponsi />} />
           <Route path="/team" element={<TeamPage />} />
-
-          {/* Catch-all redirect back to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

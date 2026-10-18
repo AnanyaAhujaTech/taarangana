@@ -13,12 +13,10 @@
   z-index: 10;
   overflow: hidden; 
   
-  /* Buffer to permanently clear the fixed navbar */
-  padding-top: clamp(100px, 12vh, 140px); 
-  padding-bottom: clamp(20px, 4vh, 80px);
+  padding-top: clamp(80px, 10vh, 120px); 
+  padding-bottom: clamp(20px, 4vh, 60px);
   padding-left: 0;
   padding-right: 0;
-  
   box-sizing: border-box;
 }
 
@@ -26,10 +24,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; 
+  justify-content: flex-start; 
   width: 100%;
   height: 100%;
-  max-width: 1600px; 
+  max-width: 100vw; 
   z-index: 20;
   margin: auto; 
 }
@@ -69,13 +67,15 @@
 }
 
 /* =========================================
-   HEADER & GRID
+   HEADER
    ========================================= */
 .homecomp4-header {
-  margin-bottom: clamp(15px, 3vh, 40px);
+  margin-bottom: clamp(10px, 2vh, 20px);
   opacity: 0;
   transform: translateY(-20px);
   transition: all 0.8s ease-out;
+  text-align: center;
+  flex-shrink: 0;
 }
 
 .homecomp4-header.is-visible {
@@ -84,41 +84,93 @@
 }
 
 .homecomp4-title-img {
-  width: clamp(200px, 35vw, 400px);
+  width: clamp(200px, 30vw, 350px);
   height: auto;
   filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
 }
 
+/* =========================================
+   🟢 THE SCROLLABLE HORIZONTAL TRACK
+   ========================================= */
 .homecomp4-grid {
   display: flex;
-  flex-wrap: wrap; 
-  justify-content: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: clamp(10px, 2vw, 25px); 
-  perspective: 2000px;
+  
   width: 100%;
-  padding: clamp(20px, 3vh, 50px) 20px; 
+  height: 100%; 
+  max-height: 75vh;
+  gap: clamp(15px, 2.5vw, 35px); 
+  
+  /* Creates space on the edges so cards can be fully scrolled into view */
+  padding: 0 5vw; 
+  
+  overflow-x: auto;
+  overflow-y: hidden;
+  
+  -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
 }
 
+/* 🟢 Snap is dynamically enabled ONLY when the JS auto-scroll stops */
+.homecomp4-grid.is-snapping {
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+/* Hide the scrollbar but keep functionality */
+.homecomp4-grid::-webkit-scrollbar {
+  display: none;
+}
+.homecomp4-grid {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* =========================================
-   CARD STYLES (FLUID)
+   CARD STYLES (Narrow Portrait)
    ========================================= */
 .homecomp4-card-outer {
-  width: min(100%, 320px); 
-  max-height: 70vh; 
-  aspect-ratio: 32 / 52;
+  width: clamp(240px, 20vw, 300px); 
+  height: 90%; 
+  max-height: 65vh; 
+  aspect-ratio: 32 / 52; 
+  
   opacity: 0;
   transform: translateY(40px);
   transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
               transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  flex-shrink: 0;
+  
+  flex-shrink: 0; 
+  scroll-snap-align: center; 
+  scroll-snap-stop: always;
   overflow: visible;
 }
 
 .homecomp4-card-outer.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* 🟢 Infinite Loop Wave Animation */
+.homecomp4-card-wave {
+  width: 100%;
+  height: 100%;
+  animation: wave-lift 4s infinite ease-in-out;
+  animation-delay: calc(var(--card-index) * 0.2s); 
+}
+
+/* Pauses the wave bounce when user hovers */
+.homecomp4-card-outer:hover .homecomp4-card-wave {
+  animation-play-state: paused;
+}
+
+@keyframes wave-lift {
+  0% { transform: translateY(0); }
+  10% { transform: translateY(-30px); } 
+  20% { transform: translateY(0); }
+  100% { transform: translateY(0); }
 }
 
 .homecomp4-card-visual {
@@ -228,47 +280,19 @@
 }
 
 /* =========================================
-   RESPONSIVE (HORIZONTAL SCROLL < 1400px)
+   RESPONSIVE (MOBILE ADJUSTMENTS)
    ========================================= */
-
-/* Triggering at 1400px because 4 cards require much more horizontal space */
-@media (max-width: 1400px) {
-  .homecomp4-header {
-    text-align: center;
-  }
-
-  .homecomp4-grid { 
-    flex-wrap: nowrap; /* Forces a single horizontal row for snap scrolling */
-    justify-content: flex-start;
-    width: 100vw;
-    overflow-x: auto;
-    overflow-y: hidden; 
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    
-    padding: clamp(20px, 4vh, 50px) calc(50vw - (min(80vw, 320px) / 2)); 
-    perspective: none; 
-  }
-
-  .homecomp4-grid::-webkit-scrollbar {
-    display: none;
-  }
+@media (max-width: 768px) {
   .homecomp4-grid {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    padding: 0 calc(50vw - 130px); /* Centers the narrower cards perfectly on phones */
+    gap: 15px;
   }
-
+  
   .homecomp4-card-outer {
-    width: min(80vw, 320px); 
-    max-height: 65vh; 
-    scroll-snap-align: center; 
-    scroll-snap-stop: always;  
+    width: 260px; 
+    max-height: 55vh; 
   }
-
-  .homecomp4-card-outer:last-child {
-    margin-right: 50px; 
-  }
-
+  
   .corner-wheel { 
     display: none; 
   }
