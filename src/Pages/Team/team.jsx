@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Navbar from '../../Components/Navbar/Navbar';
-import './Team.css';
+import './team.css';
 
 // ==========================================
 // 🛠️ CONFIG & DIRECTORY MAPPING
