@@ -18,10 +18,10 @@ import bibhatsaImg from "../../assets/bibhatsarow.webp";
 // Updated with the background images mapped to each event
 const scheduleData = [
   { type: "header", label: "22 October" },
-  { event: "Aalap", venue: "Main Stage", time: "10:30 am - 1:30 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: shantaImg },
-  { event: "Rangmanch", venue: "Auditorium", time: "10:30 am - 1:30 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: karunaImg },
+  { event: "Lilac Dreams", venue: "Main Stage", time: "10:30 am - 1:00 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: shantaImg },
+  { event: "Rap Battle", venue: "Auditorium", time: "10:30 am - 1:00 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: karunaImg },
   { event: "Aaghaaz", venue: "Kaveri Hostel Ground", time: "11:00 am - 3:00 pm", borderColor: "#e6daad", glowColor: "rgba(218, 165, 32, 0.4)", bgImage: bibhatsaImg },
-  { event: "Slam Poetry", venue: "Auditorium", time: "2:00 pm - 4:00 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: bhayanakaImg },
+  { event: "Ms. and Mr. Taarangana", venue: "Auditorium", time: "1:30 pm - 3:30 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: bhayanakaImg },
   { event: "Antra", venue: "Main Stage", time: "2:00 pm - 4:00 pm", borderColor: "#e6daad", glowColor: "rgba(212, 175, 55, 0.4)", bgImage: adbhutaImg },
   
   { type: "header", label: "23 October" },

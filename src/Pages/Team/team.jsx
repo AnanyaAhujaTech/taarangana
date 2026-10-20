@@ -13,13 +13,13 @@ const TOTAL_PAGES = 12;
 const PAGES = Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1);
 
 const PODIUM_LINKS = [
-  { label: 'Website', pageNumber: 2 },
-  { label: 'Event Management', pageNumber: 4 },
-  { label: 'PR & Security', pageNumber: 6 },
-  { label: 'Creative', pageNumber: 7 },
-  { label: 'HR & Logistics', pageNumber: 8 },
-  { label: 'Sponsorship', pageNumber: 10 },
-  { label: 'Social Media', pageNumber: 11 },
+  { label: 'Website', pageNumber: 3 },
+  { label: 'Sponsorship', pageNumber: 4 },
+  { label: 'Event Management', pageNumber: 6 },
+  { label: 'Social Media', pageNumber: 8 },
+  { label: 'PR & Security', pageNumber: 9 },
+  { label: 'Creative', pageNumber: 10 },
+  { label: 'HR & Logistics', pageNumber: 11 },
 ];
 
 const preloadedAssets = import.meta.glob('../../assets/*.{webp,jpg,jpeg,svg,png}', {
@@ -172,9 +172,9 @@ export default function TeamPage() {
       {/* 🟢 FADES IN ONCE EVERYTHING IS LOADED */}
       <div style={{ opacity: isLoaded ? 1 : 0, transition: 'opacity 0.8s ease', height: '100%' }}>
         
-        <div className="team-heading-container">
+        {/* <div className="team-heading-container">
           <img src={getAsset('teamheading.webp')} alt="Team Heading" className="team-heading-image" />
-        </div>
+        </div> */}
 
         <nav 
           className="team-sidebar-container"

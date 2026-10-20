@@ -15,7 +15,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   filter: brightness(0.65);
-  z-index: 0; 
+  z-index: 0;
   pointer-events: none;
 }
 
@@ -53,4 +53,139 @@
   position: relative;
   z-index: 10; /* Elevated z-index to sit comfortably over the cursor */
   color: white;
+}
+
+
+/* ===================================================
+   BALANCED MOBILE RESPONSIVE FIX
+   =================================================== */
+@media screen and (max-width: 768px) {
+
+  /* 1. Prevent sideways page scroll & force smooth section snap */
+  html, body, #root, .App,
+  .event-detail-page,
+  .event-scrollable-content,
+  .events-wrapper {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    scroll-behavior: smooth !important;
+    scroll-snap-type: y mandatory !important;
+  }
+
+  /* Target main outer sections for snapping */
+  .events-wrapper > div,
+  .event-scrollable-content > div {
+    scroll-snap-align: start !important;
+    scroll-snap-stop: always !important;
+  }
+
+  /* 2. Fix Top Header Buttons (Wraps cleanly if title is long) */
+  .event-header-bar,
+  .event-nav-buttons,
+  [class*="header"],
+  [class*="nav"] {
+    display: flex !important;
+    flex-wrap: wrap !important; /* Allows long badges to stack below cleanly */
+    gap: 0.4rem !important;
+    margin-bottom: 0.5rem !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .event-header-bar button,
+  .event-nav-buttons button,
+  [class*="back"],
+  [class*="badge"] {
+    font-size: 0.72rem !important;
+    padding: 0.35rem 0.6rem !important;
+    max-width: 100% !important;
+    white-space: normal !important; /* Lets long titles wrap instead of clipping */
+    word-break: break-word !important;
+    text-align: center !important;
+  }
+
+  /* 3. Title Box ("Urban Thump" / "Antra") - Balanced Sizing */
+  .event-title-badge-container,
+  .event-hero-section,
+  .event-card:first-of-type {
+    padding: 0.6rem 1rem !important;
+    min-height: 58px !important;
+    height: auto !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .event-title-badge-container span,
+  .event-hero-section span {
+    font-size: 0.7rem !important;
+  }
+
+  .event-title-badge-container h1,
+  .event-hero-section h1 {
+    font-size: 1.3rem !important;
+    line-height: 1.2 !important;
+    margin: 0.1rem 0 0 0 !important;
+  }
+
+  /* 4. Main Card Container */
+  .event-details-preview-panel,
+  .event-card {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    padding: 1rem !important;
+    gap: 0.6rem !important;
+    box-sizing: border-box !important;
+    scroll-snap-align: start !important;
+  }
+
+  /* 5. Description & Venue Text */
+  .event-details-preview-panel p,
+  .event-details-preview-panel div {
+    font-size: 0.8rem !important;
+    line-height: 1.3 !important;
+  }
+
+  /* 6. Extended Rulebook Box */
+  .event-preview-rulebook-container {
+    display: block !important;
+    width: 100% !important;
+    max-height: 180px !important; /* Extended height to show more rules */
+    overflow-y: auto !important;
+    border-left: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+    padding-top: 0.5rem !important;
+    margin-top: 0.4rem !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .event-preview-rulebook-container * {
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  /* 7. Register Button */
+  .register-btn,
+  [class*="register"],
+  [class*="registration"] {
+    display: block !important;
+    width: 100% !important;
+    max-width: 210px !important;
+    padding: 0.55rem 1rem !important;
+    font-size: 0.85rem !important;
+    margin: 0.75rem auto 0.25rem auto !important;
+    position: relative !important;
+  }
+
+  /* 8. Fix Section 2 Spacing (Stops "timeless elegance" from overlapping) */
+  .event-detailed-info-section,
+  [class*="detailed-info"] {
+    margin-top: 3.5rem !important;
+    padding-top: 1rem !important;
+    position: relative !important;
+    clear: both !important;
+    scroll-snap-align: start !important;
+  }
 }
