@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap');
+
+.ticketing-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #0b0515;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Cinzel Decorative', serif;
+  color: #f5d98b;
+}
+
+.ticketing-content {
+  text-align: center;
+  padding: 3rem;
+  border: 1px solid rgba(212, 169, 84, 0.4);
+  background: rgba(10, 6, 4, 0.6);
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 169, 84, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.ticketing-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px rgba(245, 217, 139, 0.4);
+}
+
+.ticketing-subtitle {
+  font-family: 'Arial', sans-serif;
+  font-size: 1.1rem;
+  color: #ccc;
+  margin-bottom: 2.5rem;
+  letter-spacing: 1px;
+}
+
+.ticketing-back-btn {
+  padding: 15px 30px;
+  background: transparent;
+  border: 1px solid #f5d98b;
+  color: #f5d98b;
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ticketing-back-btn:hover {
+  background: #f5d98b;
+  color: #0b0515;
+  box-shadow: 0 0 20px rgba(245, 217, 139, 0.5);
+}

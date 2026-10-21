@@ -7,6 +7,7 @@ import TeamPage from './Pages/Team/team';
 import Events from './Pages/Events/Events';
 import Sponsi from './Pages/Sponsi/Sponsi';
 import EventDetailPage from './Components/Events/EventDetailPage';
+import Ticketing from './Pages/Ticketing/Ticketing';
 
 import './index.css';
 
@@ -43,6 +44,7 @@ function App() {
           <Route path="/sponsi" element={<Sponsi />} />
           <Route path="/team" element={<TeamPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/ticketing" element={<Ticketing />} />
         </Routes>
       </div>
     </HashRouter>

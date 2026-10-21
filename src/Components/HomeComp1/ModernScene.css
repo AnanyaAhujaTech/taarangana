@@ -4,7 +4,7 @@
 :root {
   --stage-floor-height: 15%;
   --singer-base-height: 55vh;
-  --audience-height: 35%;
+  --audience-height: 35vh; /* Changed from % to vh to prevent aggressive vertical scaling */
   --logo-spacing: 55%;
 
   /* GROUP CONTROL: Adjust this to scale everyone at once */
@@ -32,14 +32,14 @@
 .lasers-layer {
   position: absolute;
   inset: 0;
-  z-index: 1; /* Lowest level above background */
+  z-index: 1; 
   pointer-events: none;
   opacity: 0.6;
   transition: opacity 0.5s ease;
 }
 
 .lasers-active .lasers-layer {
-  opacity: 1; /* Intensify on hover */
+  opacity: 1; 
 }
 
 /* --- Base Stage Background --- */
@@ -116,7 +116,6 @@
   transform: translateX(-50%) scale(var(--group-scale));
   transform-origin: bottom center;
   
-  /* Using Grid instead of Flex ensures every singer gets the exact same space */
   display: grid;
   grid-template-columns: repeat(5, 1fr); 
   align-items: flex-end;
@@ -135,23 +134,21 @@
   flex-direction: column;
   align-items: center;
   pointer-events: auto;
-  /* Resetting nudges to be more uniform for collective resizing */
   transform: translateY(var(--s-nudge-y)) scale(var(--indiv-scale));
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  /* Create a stacking context for this wrapper */
   z-index: 3;
 }
 
 /* Individual Singer Assignments */
-.singer-1 { --indiv-scale: var(--s1-scale); --nudge-x: var(--s1-nudge-x); --nudge-y: var(--s1-nudge-y); }
-.singer-2 { --indiv-scale: var(--s2-scale); --nudge-x: var(--s2-nudge-x); --nudge-y: var(--s2-nudge-y); }
-.singer-3 { --indiv-scale: var(--s3-scale); --nudge-x: var(--s3-nudge-x); --nudge-y: var(--s3-nudge-y); }
-.singer-4 { --indiv-scale: var(--s4-scale); --nudge-x: var(--s4-nudge-x); --nudge-y: var(--s4-nudge-y); }
-.singer-5 { --indiv-scale: var(--s5-scale); --nudge-x: var(--s5-nudge-x); --nudge-y: var(--s5-nudge-y); }
+.singer-1 { --indiv-scale: var(--s1-scale); }
+.singer-2 { --indiv-scale: var(--s2-scale); }
+.singer-3 { --indiv-scale: var(--s3-scale); }
+.singer-4 { --indiv-scale: var(--s4-scale); }
+.singer-5 { --indiv-scale: var(--s5-scale); }
 
 .singer-image {
-  position: relative; /* Required for z-index to work */
-  z-index: 2; /* Forces image in front of LaserBeam */
+  position: relative; 
+  z-index: 2; 
   width: 100%;
   height: var(--singer-base-height);
   min-height: 30vh; 
@@ -162,15 +159,14 @@
 
 .singer-constant-glow {
   position: absolute;
-  top: 60%; /* Adjusted to sit behind the torso */
+  top: 60%; 
   left: 50%;
   transform: translate(-50%, -50%);
   width: 350px;
   height: 350px;
-  /* Using your requested purple color */
   background: radial-gradient(circle, rgba(166, 71, 255, 0.863) 0%, transparent 70%);
   filter: blur(40px);
-  z-index: 1; /* Behind the image */
+  z-index: 1; 
   pointer-events: none;
 }
 
@@ -223,23 +219,31 @@
   50% { transform: translateY(-15px) rotate(2deg); }
 }
 
-/* --- Audience & Effects --- */
+/* --- 🟢 UPDATED AUDIENCE LAYER 🟢 --- */
 .audience-layer {
   position: absolute;
   bottom: 0;
+  left: 0;
   width: 100%;
   height: var(--audience-height);
   z-index: 4;
   pointer-events: none;
   overflow: hidden;
+  
+  /* Gradual fade at the top of the audience to blend with the stage */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 20%);
 }
 
 .audience-left, .audience-right {
   position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  bottom: 0; /* Anchors the image to the bottom floor */
+  left: 0;
+  width: 100vw; /* Forces it to fill the entire horizontal space */
+  height: 100%; /* Fills the container height */
+  
+  /* 🎛️ THE FIX: This forces the image to stretch horizontally instead of cropping */
+  object-fit: fill; 
 }
 
 .audience-left { animation: crossFadeLeft 1.5s ease-in-out infinite; }
@@ -251,18 +255,15 @@
 /* --- Floating Scroll Explorer Styling --- */
 .homecomp2-scroll-explorer {
   position: absolute;
-  /* Positioned above the logo loop footer */
   bottom: 13vh; 
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px; /* Tight gap between text and wide arrow */
+  gap: 8px; 
   z-index: 40;
   pointer-events: none;
-  
-  /* Applying the float to the entire group */
   animation: floatExplore 2.5s ease-in-out infinite;
 }
 
@@ -270,7 +271,7 @@
   font-family: 'Monteserrat', sans-serif;
   font-size: 1rem;
   font-weight: bolder;
-  letter-spacing: 0.6em; /* Extra spacing for high-end look */
+  letter-spacing: 0.6em; 
   color: #ffffff;
   opacity: 1;
   text-transform: uppercase;
@@ -280,7 +281,6 @@
 .explorer-arrow {
   color: #ffffff;
   opacity: 1;
-  /* Subtle glow to match the neon vibe */
   filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
 }
 
@@ -294,33 +294,19 @@
     rgb(0, 0, 0) 70%,
     transparent 10%
   );
-  filter: blur(15px); /* Softens the rectangular edges */
+  filter: blur(15px); 
   z-index: 39;
 }
 
-/* Smooth Floating Animation for the collective element */
 @keyframes floatExplore {
-  0%, 100% {
-    transform: translate(-50%, 0);
-  }
-  50% {
-    transform: translate(-50%, 15px);
-  }
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 15px); }
 }
 
-/* Ensuring it sits well on mobile */
 @media (max-width: 768px) {
-  .homecomp2-scroll-explorer {
-    bottom: 11vh;
-  }
-  .explorer-text {
-    font-size: 0.6rem;
-    letter-spacing: 0.4em;
-  }
-  .explorer-arrow svg {
-    width: 35px;
-    height: 12px;
-  }
+  .homecomp2-scroll-explorer { bottom: 11vh; }
+  .explorer-text { font-size: 0.6rem; letter-spacing: 0.4em; }
+  .explorer-arrow svg { width: 35px; height: 12px; }
 }
 
 /* --- Footer Area --- */
@@ -335,15 +321,10 @@
 }
 
 /* --- Collective Mobile Logic --- */
-/* --- Collective Mobile Logic (3D Carousel Queue - Final Polish) --- */
 @media (max-width: 768px) {
   :root {
-    /* Lowered the carousel to ground them closer to the audience */
     --stage-floor-height: 12%; 
-    /* Scaled down the entire carousel slightly */
     --singer-base-height: 48vh; 
-    
-    /* Explicitly override desktop scales to make their base dimensions 100% equal */
     --s1-scale: 1; 
     --s2-scale: 1; 
     --s3-scale: 1; 
@@ -388,11 +369,10 @@
     width: auto; 
     object-fit: contain; 
     position: relative;
-    z-index: 1; /* Ensures image stays behind the text */
+    z-index: 1; 
   }
 
   /* --- THE CAROUSEL POSITIONS --- */
-
   .pos-center { 
     left: 50%; 
     transform: translateX(-50%) scale(1) !important; 
@@ -435,30 +415,25 @@
 
   /* --- TEXT CENTERED IN FRONT --- */
   .singer-info {
-    top: 50%; /* Drops the text to the vertical middle of the wrapper */
-    bottom: auto; /* Clears the old desktop 'bottom' rule */
+    top: 50%; 
+    bottom: auto; 
     left: 50%;
-    z-index: 20; /* Forces the text to hover in front of the singer */
+    z-index: 20; 
     width: max-content;
     opacity: 0;
-    
-    /* Soft dark glow to ensure readability over the bright lasers */
     background: radial-gradient(circle, rgba(0,0,0,0.6) 0%, transparent 65%);
     padding: 1rem 2rem;
-    
-    /* Start slightly lower for a smooth float-up effect */
     transform: translate(-50%, -30%);
     transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
   }
   
   .pos-center .singer-info {
     opacity: 1;
-    /* Centers it perfectly in the middle of their chest/torso */
     transform: translate(-50%, -50%);
   }
 
   .singer-info-name { 
-    font-size: 1.3rem; /* Slightly larger for center focus */
+    font-size: 1.3rem; 
     text-shadow: 0 0 15px var(--hover-color), 0 0 30px #000; 
   }
   
@@ -467,7 +442,71 @@
     text-shadow: 0 0 10px #000;
   }
 
-  /* UI Layout fixes */
-  .audience-layer { height: 28%; bottom: 0; pointer-events: none; }
+
+/* --- CRITICAL FIX: Modern Scene CTA Button --- */
+.modern-cta-wrapper {
+  position: fixed !important; /* Force it to break out of all parent flows */
+  bottom: 22vh !important; 
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 999999 !important; /* Absolute highest layer possible */
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  pointer-events: auto !important; /* Force clicks to register */
+}
+
+.modern-cta-btn {
+  padding: 1.5vh 5vw !important;
+  background: rgba(15, 0, 31, 0.9) !important;
+  border: 1px solid rgba(197, 82, 255, 0.9) !important;
+  color: #fff !important;
+  font-family: 'Montserrat', sans-serif !important; 
+  font-weight: 600 !important;
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem) !important;
+  letter-spacing: 0.25em !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+  
+  box-shadow: 0 0 25px rgba(197, 82, 255, 0.6), inset 0 0 15px rgba(197, 82, 255, 0.4) !important;
+  text-shadow: 0 0 5px #fff, 0 0 15px #c552ff !important;
+  
+  pointer-events: all !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.modern-cta-btn:hover {
+  background: rgba(197, 82, 255, 0.4) !important;
+  border-color: #f0b0ff !important;
+  transform: scale(1.05) !important; 
+}
+
+/* Mobile Adjustment for Button */
+@media (max-width: 768px) {
+  .modern-cta-wrapper {
+    bottom: 18vh !important; 
+  }
+  .modern-cta-btn {
+    padding: 1.5vh 12vw !important;
+    font-size: 0.85rem !important;
+  }
+}
+
+  /* 🟢 MOBILE AUDIENCE FIX */
+  .audience-layer { 
+    height: 28vh; /* Match the vh unit from desktop for consistency */
+    bottom: 0; 
+    pointer-events: none; 
+  }
+  
+  /* On mobile, standard 'cover' often works best to avoid extreme distortions */
+  .audience-left, .audience-right {
+    object-fit: cover; 
+  }
+
   .homecomp2-scroll-explorer { bottom: 12vh; }
 }

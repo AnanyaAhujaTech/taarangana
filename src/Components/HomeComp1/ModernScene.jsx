@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // 🟢 Added for correct routing
 import './ModernScene.css';
 import LaserFlow from './LaserFlow';
 import LaserBeam from './LaserBeam';
@@ -41,8 +42,10 @@ export default function ModernScene() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [autoIndex, setAutoIndex] = useState(0);
+  
+  // 🟢 Initialize the React Router hook
+  const navigate = useNavigate();
 
-  // Detect Mobile device to switch interaction modes
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     handleResize(); 
@@ -50,13 +53,12 @@ export default function ModernScene() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Automatic looping logic for mobile (Carousel Queue)
   useEffect(() => {
     let interval;
     if (isMobile) {
       interval = setInterval(() => {
         setAutoIndex((prev) => (prev + 1) % SINGER_DATA.length);
-      }, 3000); // Rotates every 3 seconds
+      }, 3000); 
     }
     return () => clearInterval(interval);
   }, [isMobile]);
@@ -65,13 +67,11 @@ export default function ModernScene() {
   const defaultLaserColor = '#790291'; 
   const activeColor = activeIndex !== null ? SINGER_DATA[activeIndex].laser : defaultLaserColor;
 
-  // Calculates relative position for the 3D Carousel effect
   const getMobilePositionClass = (index) => {
     if (!isMobile) return '';
-    const total = SINGER_DATA.length; // 5
+    const total = SINGER_DATA.length; 
     let diff = index - activeIndex;
     
-    // Adjust logic to create a continuous wrap-around loop
     if (diff < -2) diff += total;
     if (diff > 2) diff -= total;
 
@@ -91,6 +91,7 @@ export default function ModernScene() {
         <img src={taaranganaHeading} alt="Taarangana Presents" className="taarangana-heading" />
         <img src={ethereaHeading} alt="Etherea" className="etherea-heading" />
         <p className="fest-subtitle">Where the Navrasa Transcend</p>
+        {/* Button removed from here because pointer-events: none breaks it */}
       </div>
 
       <div className="logo-layer">
@@ -110,7 +111,6 @@ export default function ModernScene() {
           return (
             <div 
               key={index} 
-              // Combine standard desktop classes with dynamic mobile position classes
               className={`singer-wrapper ${singer.className} ${isActive ? 'is-active' : ''} ${mobilePosClass}`} 
               onMouseEnter={() => !isMobile && setHoveredIndex(index)} 
               onMouseLeave={() => !isMobile && setHoveredIndex(null)} 
@@ -138,6 +138,17 @@ export default function ModernScene() {
       <div className="audience-layer">
         <img src={audienceLeft} alt="" className="audience-left" />
         <img src={audienceRight} alt="" className="audience-right" />
+      </div>
+
+      {/* 🟢 NEW TICKETING BUTTON (Placed right above the scroll explorer) */}
+      <div className="modern-cta-wrapper">
+        <button 
+          className="modern-cta-btn"
+          onClick={() => navigate('/ticketing')}
+          onTouchEnd={(e) => { e.preventDefault(); navigate('/ticketing'); }}
+        >
+          Buy Tickets
+        </button>
       </div>
 
       <div className="homecomp2-scroll-explorer">

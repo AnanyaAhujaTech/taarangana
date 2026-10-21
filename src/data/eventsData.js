@@ -429,7 +429,7 @@ Total Prize Pool of Taarangana’26: ₹150k+ Gift Hampers.
     eventType: "Open Mic",
     description: "Open Mic – True expression requires vulnerability. Face the fear of being seen, heard, and judged.",
     whyText: "Slam poetry embodies fear through the vulnerability of standing alone, bearing your soul, and facing judgment from the audience.",
-    time: "2:00 PM – 4:00 PM",
+    time: "1:30 PM – 3:30 PM",
     venue: "Auditorium",
     rasaColor: "#7c49e4",
     cardBg: slamPoetryCard,

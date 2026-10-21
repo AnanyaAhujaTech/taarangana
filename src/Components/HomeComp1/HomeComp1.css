@@ -28,7 +28,6 @@
 
 /* 1. Traditional Counter (Dramatic & Golden) */
 .traditional-counter {
-  /* Warm, dark radial fade to make gold pop */
   background: radial-gradient(
     circle at center, 
     rgba(26, 18, 5, 0.7) 0%, 
@@ -60,7 +59,6 @@
 
 /* 2. Modern Counter (Neon Purple & Tech) */
 .modern-counter {
-  /* Deep purple/black radial fade for neon contrast */
   background: radial-gradient(
     circle at center, 
     rgba(15, 0, 31, 0.8) 0%, 
@@ -95,7 +93,6 @@
   to { text-shadow: 0 0 10px #fff, 0 0 25px #c084fc, 0 0 40px #9333ea; }
 }
 
-/* Container for all scene content - this gets glitched */
 .scene-main-content {
   position: absolute;
   inset: 0;
@@ -105,7 +102,6 @@
   z-index: 1;
 }
 
-/* ---------- Traditional Scene specific styles (moved from old root) ---------- */
 .trad-scene-container {
   position: absolute;
   inset: 0;
@@ -136,43 +132,40 @@
   transition: opacity 0.5s ease 1.5s;
 }
 
-/* ---------- Text and UI Positioning ---------- */
 .homecomp1-rasa-label {
-    position: absolute;
-    top: 32vh;
-    left: 0;
-    z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
-
-.homecomp1-rasa-label p {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: clamp(1rem, 5vw, 1.8rem);
-    letter-spacing: 0.01rem;
-    color: #f5d98b;
-    text-shadow: 0 0 20px rgba(212, 170, 84, 0.5);
-    margin: 0;
-    text-align: center;
-}
-
-/* --- Centered Button Fix in HomeComp1.css --- */
-/* --- Ultra-Stable Centering in HomeComp1.css --- */
-.homecomp1-cta-wrap {
   position: absolute;
-  bottom: 12vh; /* Slightly adjusted for better visual balance */
-  left: 50% !important;
-  /* Use translate instead of translateX to ensure 
-     no other transforms interfere */
-  transform: translate(-50%, 0) !important;
-  
-  width: auto;
+  top: 32vh;
+  left: 0;
+  width: 100%;
+  z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100; /* Higher than scene stack */
+  pointer-events: none;
+}
+
+.homecomp1-rasa-label p {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1rem, 5vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #fef5dc;
+  text-shadow: 0 0 40px rgba(212, 170, 84, 0.5);
+}
+
+/* --- CTA BUTTONS WRAPPER --- */
+.homecomp1-cta-wrap {
+  position: absolute;
+  bottom: 12vh; 
+  left: 50% !important;
+  transform: translate(-50%, 0) !important;
+  
+  display: flex;
+  flex-direction: row; /* Buttons side-by-side on desktop */
+  gap: 2vw; /* Space between buttons */
+  justify-content: center;
+  align-items: center;
+  z-index: 100; 
   pointer-events: auto;
   animation: fadeUp 1.2s ease 1s both;
 }
@@ -182,7 +175,7 @@
   background: rgba(10, 6, 4, 0.738);
   border: 1px solid rgba(212, 169, 84, 0.793);
   color: #f5d98b;
-  font-family: 'Cinzel Decorative', serif; /* Matching your header font */
+  font-family: 'Cinzel Decorative', serif; 
   font-size: clamp(0.8rem, 1.5vw, 1.1rem);
   letter-spacing: 0.2em;
   cursor: pointer;
@@ -196,6 +189,22 @@
   background: #f5d98bbf;
   color: #000;
   box-shadow: 0 0 40px rgba(245, 217, 139, 0.3);
+}
+
+/* Subtle styling distinction for the Ticket Button */
+.ticket-btn {
+  padding: 1.8vh 4vw;
+  background: rgba(10, 6, 4, 0.738);
+  border: 1px solid rgba(212, 169, 84, 0.793);
+  color: #f5d98b;
+  font-family: 'Cinzel Decorative', serif; 
+  font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s ease;
+  white-space: nowrap;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
 /* ---------- Curtains ---------- */
@@ -220,48 +229,47 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 1000; /* Above everything */
+  z-index: 1000; 
   pointer-events: none;
   opacity: 0;
   will-change: opacity;
   background-color: transparent;
 }
 
-/* This applies the actual SVG filter to the main content */
 .glitching .scene-main-content {
   filter: url(#chroma-glitch);
 }
 
-/* Animations */
 @keyframes curtainLeft { 100% { transform: translateX(-105%); } }
 @keyframes curtainRight { 100% { transform: translateX(105%); } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+/* ==========================================
+   MOBILE MEDIA QUERY
+   ========================================== */
 @media (max-width: 768px) {
-  /* 1. CTA Button Position */
+  
   .homecomp1-cta-wrap {
-    bottom: 18vh !important;
-    left: 50% !important;
-    transform: translate(-50%, 0) !important;
+    bottom: 12vh !important; /* Slightly lower to accommodate stacked buttons */
+    flex-direction: column; /* Stack buttons vertically on mobile */
+    gap: 15px; /* Vertical spacing between buttons */
   }
 
   .homecomp1-cta {
-    padding: 1.8vh 10vw;
-    font-size: 0.9rem;
+    padding: 1.5vh 12vw;
+    font-size: 0.85rem;
     letter-spacing: 0.15em;
+    width: 100%; /* Makes buttons identical width when stacked */
   }
 
-  /* 2. Optimized Rasa Label (Placement & Visibility) */
   .homecomp1-rasa-label {
-    top: 32vh; /* Positioned above the dancer's head */
+    top: 32vh; 
     left: 0;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 20;
-    
-    /* Soft dark radial overlay to make gold text readable over bright stage lights */
     background: radial-gradient(
       circle, 
       rgba(0, 0, 0, 0.6) 0%, 
@@ -272,23 +280,19 @@
   }
 
   .homecomp1-rasa-label p {
-    font-size: 1.4rem; /* Slightly smaller for mobile elegance */
+    font-size: 1.4rem; 
     letter-spacing: 0.2em;
     text-align: center;
-    /* Extra glow for premium feel */
     text-shadow: 0 0 15px rgba(245, 217, 139, 0.6);
   }
 
-  /* 3. Site Visit Counter Adjustment */
   .site-visit-counter {
     top: 15px;
     right: 15px;
-    transform: scale(0.85); /* Slightly smaller to give more room for heading */
+    transform: scale(0.85); 
     transform-origin: top right;
   }
 
-  /* 4. Heading/Presenter text tweak for mobile */
-  /* If you have a separate div for "Taarangana Presents" in TraditionalScene */
   .trad-scene-container::before {
     content: "";
     position: absolute;
