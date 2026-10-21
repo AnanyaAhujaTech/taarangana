@@ -1,55 +1,421 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Cinzel:wght@600;700&display=swap');
 
-.ticketing-container {
+/* 🟢 FORCED SCROLL FIX: Override any global 100vh hidden rules */
+html, body {
+  overflow-y: auto !important; 
+}
+
+.ticketing-root {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100vw;
-  height: 100vh;
-  background-color: #0b0515;
+  min-height: 100vh; /* Allows content to expand beyond viewport */
+  height: max-content; /* Forces container to hug the content */
+  background-color: #05000a;
+  color: #fff;
+  overflow-y: auto !important; /* Critical for scrolling */
+  overflow-x: hidden;
+  font-family: 'Montserrat', sans-serif;
+  
+  padding-top: 120px; /* Space for Navbar */
+  padding-bottom: 100px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  font-family: 'Cinzel Decorative', serif;
-  color: #f5d98b;
+  align-items: flex-start; /* Ensures content starts at the top, not middle */
+  z-index: 10;
 }
 
-.ticketing-content {
+/* =========================================================
+   FROSTED PURPLE GLASS CONTAINER
+   ========================================================= */
+.ticketing-glass-container {
+  position: relative;
+  z-index: 20; /* Keep above vortex */
+  width: 90%;
+  max-width: 900px;
+  
+  /* Deep purple tinted frosted glass */
+  background: rgba(25, 5, 45, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  
+  border: 1px solid rgba(197, 82, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(197, 82, 255, 0.1);
+  
+  padding: 40px 50px;
+  margin-bottom: 40px; /* Extra breathing room at bottom of scroll */
+}
+
+/* =========================================================
+   TYPOGRAPHY & SECTIONS
+   ========================================================= */
+.ticketing-main-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
   text-align: center;
-  padding: 3rem;
-  border: 1px solid rgba(212, 169, 84, 0.4);
-  background: rgba(10, 6, 4, 0.6);
-  border-radius: 12px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 169, 84, 0.1);
-  backdrop-filter: blur(10px);
-}
-
-.ticketing-title {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  color: #eaddcf;
+  text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 0 0 15px rgba(245, 217, 139, 0.4);
+  margin-bottom: 40px;
+  text-shadow: 0 0 20px rgba(197, 82, 255, 0.6);
 }
 
-.ticketing-subtitle {
-  font-family: 'Arial', sans-serif;
-  font-size: 1.1rem;
-  color: #ccc;
-  margin-bottom: 2.5rem;
+.ticketing-section {
+  margin-bottom: 30px;
+}
+
+.ticketing-section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem;
+  color: #d487fa;
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(197, 82, 255, 0.3);
+  padding-bottom: 10px;
+}
+
+.ticketing-intro-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.highlight-text {
+  color: #f5d98b;
+  font-weight: 600;
   letter-spacing: 1px;
 }
 
-.ticketing-back-btn {
-  padding: 15px 30px;
-  background: transparent;
-  border: 1px solid #f5d98b;
-  color: #f5d98b;
-  font-family: 'Cinzel Decorative', serif;
+/* =========================================================
+   LISTS & WARNINGS
+   ========================================================= */
+.ticketing-list {
+  padding-left: 20px;
+  margin-bottom: 25px;
+}
+
+.ticketing-list li {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #d1d1d1;
+  margin-bottom: 12px;
+}
+
+.ticketing-list li strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.bullet-list {
+  list-style-type: square;
+}
+
+.bullet-list li::marker {
+  color: #d487fa;
+}
+
+.ticketing-warning-blocks p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #eaddcf;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px 15px;
+  border-left: 3px solid #d487fa;
+  margin-bottom: 10px;
+}
+
+.ticketing-alert-box {
+  background: rgba(255, 60, 60, 0.1);
+  border: 1px solid rgba(255, 60, 60, 0.4);
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #ffd1d1;
+  margin-top: 20px;
+}
+
+.ticketing-alert-box strong {
+  color: #ff6b6b;
+}
+
+.ticketing-divider {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(197, 82, 255, 0.5), transparent);
+  margin: 40px 0;
+}
+
+/* =========================================================
+   TASKS & VERIFICATION
+   ========================================================= */
+.center-aligned {
+  text-align: center;
+}
+
+.ticketing-task-desc {
   font-size: 1rem;
+  line-height: 1.6;
+  color: #e0e0e0;
+  margin-bottom: 25px;
+}
+
+.ticketing-task-desc strong {
+  color: #f5d98b;
+}
+
+.ticketing-task-btn {
+  display: inline-block;
+  padding: 15px 35px;
+  background: transparent;
+  border: 2px solid #d487fa;
+  color: #d487fa;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(197, 82, 255, 0.2);
+}
+
+.ticketing-task-btn:hover {
+  background: #d487fa;
+  color: #110220;
+  box-shadow: 0 0 25px rgba(197, 82, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+/* =========================================================
+   FAKE DATABASE VERIFICATION UI
+   ========================================================= */
+.ticketing-verification-section {
+  background: rgba(10, 2, 20, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.verification-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.verification-desc {
+  font-size: 0.9rem;
+  color: #bbb;
+  margin-bottom: 20px;
+}
+
+.verification-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.verification-input {
+  width: 100%;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(197, 82, 255, 0.4);
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  text-align: center;
+  transition: border-color 0.3s ease;
+}
+
+.verification-input:focus {
+  outline: none;
+  border-color: #d487fa;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.verification-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.verification-submit-btn {
+  padding: 12px 30px;
+  background: #d487fa;
+  color: #110220;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.verification-submit-btn:hover:not(:disabled) {
+  background: #eaddcf;
+  box-shadow: 0 0 15px rgba(234, 221, 207, 0.6);
+}
+
+.verification-submit-btn:disabled {
+  background: #66417a;
+  color: #999;
+  cursor: wait;
+}
+
+/* Loading Spinner */
+.loading-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #d487fa;
+  animation: fadeIn 0.3s ease;
+}
+
+.loading-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(197, 82, 255, 0.2);
+  border-top-color: #d487fa;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Success State & Final Link */
+.success-container {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(197, 82, 255, 0.2);
+}
+
+.success-icon {
+  width: 40px;
+  height: 40px;
+  background: #03ad00;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  margin: 0 auto 10px;
+  box-shadow: 0 0 15px rgba(3, 173, 0, 0.5);
+}
+
+.success-text {
+  color: #03ad00;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.proceed-text {
+  color: #e0e0e0;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.final-registration-btn {
+  display: inline-block;
+  padding: 15px 40px;
+  background: linear-gradient(135deg, #c552ff 0%, #790291 100%);
+  color: #fff;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  text-decoration: none;
   letter-spacing: 2px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(197, 82, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.final-registration-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(197, 82, 255, 0.8);
+}
+
+/* =========================================================
+   RETURN TO HOME BUTTON
+   ========================================================= */
+.ticketing-footer-actions {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid rgba(197, 82, 255, 0.2);
+  padding-top: 30px;
+}
+
+.ticketing-home-btn {
+  padding: 12px 30px;
+  background: transparent;
+  border: 1px solid rgba(197, 82, 255, 0.8);
+  color: rgba(197, 82, 255, 0.8);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.ticketing-back-btn:hover {
-  background: #f5d98b;
-  color: #0b0515;
-  box-shadow: 0 0 20px rgba(245, 217, 139, 0.5);
+.ticketing-home-btn:hover {
+  background: rgba(197, 82, 255, 0.8);
+  color: #110220;
+  box-shadow: 0 0 20px rgba(245, 217, 139, 0.4);
+}
+
+/* Animations */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.slide-down {
+  animation: slideDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================
+   MOBILE RESPONSIVENESS
+   ========================================================= */
+@media (max-width: 768px) {
+  .ticketing-glass-container {
+    width: 95%;
+    padding: 30px 20px;
+  }
+
+  .ticketing-main-title {
+    font-size: 1.8rem;
+  }
+
+  .ticketing-section-title {
+    font-size: 1.5rem;
+  }
+
+  .ticketing-list li {
+    font-size: 0.9rem;
+  }
+
+  .ticketing-task-btn, .final-registration-btn, .ticketing-home-btn {
+    width: 100%;
+    padding: 15px 0;
+    box-sizing: border-box;
+  }
 }

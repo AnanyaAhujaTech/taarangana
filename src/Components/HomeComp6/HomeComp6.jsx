@@ -28,7 +28,7 @@ const questions = [
   },
   {
     q: "What am I allowed to bring inside?",
-    a: "Travel light. Only essentials like your phone, wallet and small purses are allowed. Large bags and outside food or drinks (yes, even water bottles) won’t be permitted inside the venue."
+    a: "Travel light. Only essentials like your phone and small pocket wallet are allowed. Handbags, clutches and outside food or drinks (yes, even water bottles) won’t be permitted inside the venue."
   },
   {
     q: "Can students from other colleges attend?",
