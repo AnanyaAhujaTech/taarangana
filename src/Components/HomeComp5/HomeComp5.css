@@ -76,6 +76,7 @@
 }
 
 /* Foreground UI Layer */
+/* Foreground UI Layer */
 .hc5-content-layer {
   position: relative;
   z-index: 10;
@@ -87,7 +88,13 @@
   padding-top: 80px;
 }
 
+/* 🟢 FIX: Forces the header block to strictly center its contents */
 .hc5-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -95,6 +102,8 @@
 .hc5-logo {
   width: 280px;
   max-width: 85vw;
+  margin: 0 auto; /* Hard-center the image itself */
+  display: block;
   filter: drop-shadow(0 0 15px rgba(255,255,255,0.15));
 }
 
@@ -105,6 +114,10 @@
   color: #c0a7ff;
   margin-top: 1.2rem;
   text-transform: uppercase;
+  margin-left: auto;
+  margin-right: auto;
+  /* Push text slightly to the right to visually balance the extra letter-spacing on the last character */
+  padding-left: 0.8rem; 
 }
 
 /* Carousel Mechanics */
@@ -186,6 +199,12 @@
 /* Mobile Scaling & Native Swipe Handling */
 @media (max-width: 768px) {
   /* Push background image down, reduce size, keep opacity */
+  .hc5-header {
+    width: 100vw;
+    padding: 0;
+    margin-left: 0;
+  }
+
   .hc5-background-img {
     bottom: -300px;
     width: 450px;

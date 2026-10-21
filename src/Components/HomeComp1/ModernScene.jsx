@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // 🟢 Added for correct routing
 import './ModernScene.css';
 import LaserFlow from './LaserFlow';
 import LaserBeam from './LaserBeam';
@@ -42,9 +41,6 @@ export default function ModernScene() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [autoIndex, setAutoIndex] = useState(0);
-  
-  // 🟢 Initialize the React Router hook
-  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -91,7 +87,6 @@ export default function ModernScene() {
         <img src={taaranganaHeading} alt="Taarangana Presents" className="taarangana-heading" />
         <img src={ethereaHeading} alt="Etherea" className="etherea-heading" />
         <p className="fest-subtitle">Where the Navrasa Transcend</p>
-        {/* Button removed from here because pointer-events: none breaks it */}
       </div>
 
       <div className="logo-layer">
@@ -138,17 +133,6 @@ export default function ModernScene() {
       <div className="audience-layer">
         <img src={audienceLeft} alt="" className="audience-left" />
         <img src={audienceRight} alt="" className="audience-right" />
-      </div>
-
-      {/* 🟢 NEW TICKETING BUTTON (Placed right above the scroll explorer) */}
-      <div className="modern-cta-wrapper">
-        <button 
-          className="modern-cta-btn"
-          onClick={() => navigate('/ticketing')}
-          onTouchEnd={(e) => { e.preventDefault(); navigate('/ticketing'); }}
-        >
-          Buy Tickets
-        </button>
       </div>
 
       <div className="homecomp2-scroll-explorer">

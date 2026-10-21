@@ -69,12 +69,18 @@
 /* =========================================
    HEADER
    ========================================= */
+/* =========================================
+   HEADER
+   ========================================= */
 .homecomp4-header {
+  width: 100%; /* Force full width so centering works */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: clamp(10px, 2vh, 20px);
   opacity: 0;
   transform: translateY(-20px);
   transition: all 0.8s ease-out;
-  text-align: center;
   flex-shrink: 0;
 }
 
@@ -86,6 +92,8 @@
 .homecomp4-title-img {
   width: clamp(200px, 30vw, 350px);
   height: auto;
+  margin: 0 auto; /* Hard-center the image itself */
+  display: block;
   filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
 }
 
@@ -283,8 +291,15 @@
    RESPONSIVE (MOBILE ADJUSTMENTS)
    ========================================= */
 @media (max-width: 768px) {
+  .homecomp4-header {
+    width: 100vw; /* Stretch across entire mobile screen */
+    justify-content: center;
+    padding: 0;
+    margin-left: 0;
+  }
+
   .homecomp4-grid {
-    padding: 0 calc(50vw - 130px); /* Centers the narrower cards perfectly on phones */
+    padding: 0 calc(50vw - 130px); 
     gap: 15px;
   }
   

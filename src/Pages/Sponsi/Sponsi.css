@@ -311,6 +311,23 @@
 @keyframes gearSpinCCW { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
 
 /* =========================================================
+   🟢 FADE-IN SCROLL ANIMATION
+   ========================================================= */
+.fade-in-cell {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* The transition delay creates a subtle staggering effect if multiple appear at once */
+  transition-delay: 0.1s; 
+}
+
+.fade-in-cell.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================================
    MOBILE RESPONSIVENESS
    ========================================================= */
 @media (max-width: 768px) {

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import './Sponsi.css';
 
 import Navbar from '../../Components/Navbar/Navbar';
+import { Vortex } from '../../Components/Vortex/Vortex';
 
-// Background & Header Assets
-import bgImage from '../../assets/bgsponsi.webp';
+// Header Assets
 import sponsorHeading from '../../assets/Sponsor.webp';
 import sponsorTop from '../../assets/Sponsor Top.webp';
 import sponsorBottom from '../../assets/Sponsor Bottom.webp';
@@ -33,8 +33,6 @@ import logo13 from '../../assets/logo13.webp';
 
 const DANGLERS = [dangler1, dangler2, dangler3];
 
-// 🟢 Map the titles to their specific logos. 
-// Logo 2 is handled separately as the Title Sponsor.
 const SPONSORS_DATA = [
   { id: 1, img: logo1, title: "Official Student Partner" },
   { id: 3, img: logo3, title: "Wellness Partner" },
@@ -43,7 +41,7 @@ const SPONSORS_DATA = [
   { id: 6, img: logo6, title: "Banking Partner" },
   { id: 7, img: logo7, title: "Wellness Partner" },
   { id: 8, img: logo8, title: "Hygiene Partner" },
-  { id: 9, img: logo9, title: "Digital Partner" }, // Logo 9 had no specified title
+  { id: 9, img: logo9, title: "Digital Partner" }, 
   { id: 10, img: logo10, title: "Dining Partner" },
   { id: 11, img: logo11, title: "Career Partner" },
   { id: 12, img: logo12, title: "Technology Partner" },
@@ -69,6 +67,37 @@ function DanglerCluster({ side }) {
 }
 
 /* =========================================================
+   🟢 FADE-IN WRAPPER COMPONENT
+   ========================================================= */
+function FadeInCell({ children, className }) {
+  const cellRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target); // Only animate once
+        }
+      },
+      { threshold: 0.15 } // Trigger when 15% visible
+    );
+
+    if (cellRef.current) {
+      observer.observe(cellRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={cellRef} className={`sponsi-grid-cell fade-in-cell ${className || ''}`}>
+      {children}
+    </div>
+  );
+}
+
+/* =========================================================
    MAIN COMPONENT
    ========================================================= */
 export default function Sponsi() {
@@ -76,11 +105,12 @@ export default function Sponsi() {
     <div className="sponsi-container">
       <Navbar isVisible={true} />
 
-      {/* 1. FIXED BACKGROUND LAYER */}
-      <div
-        className="sponsi-background"
-        style={{ backgroundImage: `url("${bgImage}")` }}
-        aria-hidden="true"
+      {/* 1. 🟢 NEW FIXED BACKGROUND LAYER: VORTEX */}
+      <Vortex 
+        particleCount={350} 
+        baseHue={260} 
+        rangeHue={60} 
+        backgroundColor="#05000a" 
       />
 
       {/* 2. FIXED DECORATION LAYER (Mandalas & Danglers) */}
@@ -104,21 +134,21 @@ export default function Sponsi() {
           <img src={sponsorBottom} alt="" className="sponsor-bottom-decoration" draggable="false" />
         </div>
 
-        {/* 🟢 THE FLEXIBLE ITINERARY-STYLE GRID */}
+        {/* THE FLEXIBLE ITINERARY-STYLE GRID */}
         <div className="sponsi-grid-container">
           
-          {/* --- TITLE SPONSOR (Full Row) --- */}
-          <div className="sponsi-grid-cell title-sponsor-cell">
+          {/* --- TITLE SPONSOR (Full Row, Fade In) --- */}
+          <FadeInCell className="title-sponsor-cell">
             <div className="sponsi-noise-overlay" />
             <div className="sponsi-cell-content">
               <img src={logo2} alt="Title Sponsor" className="sponsi-logo-img" />
               <h3 className="sponsi-logo-title">Title Sponsor</h3>
             </div>
-          </div>
+          </FadeInCell>
 
-          {/* --- THE REMAINING CATEGORY SPONSORS --- */}
+          {/* --- THE REMAINING CATEGORY SPONSORS (Fade In) --- */}
           {SPONSORS_DATA.map((sponsor) => (
-            <div key={sponsor.id} className="sponsi-grid-cell">
+            <FadeInCell key={sponsor.id}>
               <div className="sponsi-noise-overlay" />
               <div className="sponsi-cell-content">
                 <img 
@@ -130,7 +160,7 @@ export default function Sponsi() {
                   <h4 className="sponsi-logo-title">{sponsor.title}</h4>
                 )}
               </div>
-            </div>
+            </FadeInCell>
           ))}
 
         </div>

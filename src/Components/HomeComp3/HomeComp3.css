@@ -67,6 +67,10 @@
    HEADER & GRID
    ========================================= */
 .homecomp3-header {
+  width: 100%; /* Force full width so centering works */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: clamp(15px, 3vh, 40px); 
   opacity: 0;
   transform: translateY(-20px);
@@ -81,9 +85,10 @@
 .homecomp3-title-img {
   width: clamp(260px, 40vw, 360px);
   height: auto;
+  margin: 0 auto; /* Hard-center the image itself */
+  display: block;
   filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.2));
 }
-
 .homecomp3-grid {
   display: flex;
   flex-wrap: nowrap;
@@ -236,9 +241,14 @@
    RESPONSIVE (MOBILE ONLY)
    ========================================= */
 @media (max-width: 768px) {
+    /* 🟢 FIX: Forces the image inside the header to center perfectly */
   .homecomp3-header {
-    text-align: center;
-  }
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
 
   .homecomp3-grid { 
     justify-content: flex-start;
