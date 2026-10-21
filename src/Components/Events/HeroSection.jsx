@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import "./HeroSection.css";
-import heading from "../../assets/EventsHeading.png";
+// 🟢 Restored the Roof import
 import roofFrame from "../../assets/roof.svg"; 
 import stainedGlassOverlay from "../../assets/window.svg";
 
@@ -16,15 +16,15 @@ import vid8 from "../../assets/8.mp4";
 import vid9 from "../../assets/9.mp4";
 
 // Import Thumbnails
-import thumb1 from "../../assets/1.png"; 
-import thumb2 from "../../assets/2.png";
-import thumb3 from "../../assets/3.png";
-import thumb4 from "../../assets/4.png";
-import thumb5 from "../../assets/5.png";
-import thumb6 from "../../assets/6.png";
-import thumb7 from "../../assets/7.png";
-import thumb8 from "../../assets/8.png";
-import thumb9 from "../../assets/9.png";
+import thumb1 from "../../assets/1.webp"; 
+import thumb2 from "../../assets/2.webp";
+import thumb3 from "../../assets/3.webp";
+import thumb4 from "../../assets/4.webp";
+import thumb5 from "../../assets/5.webp";
+import thumb6 from "../../assets/6.webp";
+import thumb7 from "../../assets/7.webp";
+import thumb8 from "../../assets/8.webp";
+import thumb9 from "../../assets/9.webp";
 
 const eventsList = [
   { id: 1, video: vid1, thumb: thumb1, color: "#00FFFF" }, 
@@ -89,17 +89,12 @@ export default function HeroSection() {
   return (
     <section className="hero">
       
-      {/* 🏗️ THE MASTER WRAPPER 
-          This forces the roof and grid to share the exact same width */}
+      {/* 🏗️ THE MASTER WRAPPER */}
       <div className="hero-content-wrapper">
         
-        {/* 1. The Architectural Crown (Roof + Title) */}
-        <div className="roof-and-heading-container">
+        {/* 1. The Roof (Heading is removed as requested) */}
+        <div className="roof-container">
           <img src={roofFrame} alt="Roof" className="roof-svg" />
-          <div className="hero-header-wrapper">
-            <div className="golden-glow-backdrop"></div>
-            <img src={heading} alt="Events Heading" className="events-heading" />
-          </div>
         </div>
 
         {/* 2. The Fluid 3x3 Grid */}

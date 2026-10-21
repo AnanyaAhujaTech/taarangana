@@ -14,33 +14,53 @@
   overflow: hidden;
 }
 
+/* 🟢 NEW HEADER STYLING */
 .rasa-header {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%; 
+  max-width: 1000px; /* Controls how wide the roof gets */
+  flex-shrink: 0; 
   margin-bottom: 2vh;
-  flex-shrink: 0;
+  z-index: 30;
 }
 
-.rasa-title {
-  font-size: clamp(1.8rem, 4vh, 3rem);
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0 0 0.5vh 0;
-  letter-spacing: -0.5px;
+.rasa-roof-svg {
+  width: 100%; 
+  height: 12vh; 
+  min-height: 50px;
+  object-fit: fill; 
+  margin-bottom: -5vh; /* Tucks heading up into the roof */
+  filter: drop-shadow(0 0 10px rgba(230, 218, 173, 0.4));
+  z-index: 5;
 }
 
-.rasa-title span {
-  color: #cfb75f;
+.rasa-heading-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
 }
 
-.rasa-subtitle {
-  font-size: clamp(0.85rem, 1.8vh, 1rem);
-  color: #e6daad;
-  font-style: italic;
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.4;
+.rasa-golden-glow {
+  position: absolute;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(230, 218, 173, 0.45) 0%, rgba(230, 218, 173, 0) 65%);
+  filter: blur(25px);
+  z-index: -1;
 }
 
+.rasa-heading-img {
+  max-height: clamp(35px, 6vh, 100px); 
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(230, 218, 173, 0.8)); 
+}
+
+
+/* --- GRID STYLING --- */
 .rasa-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -50,7 +70,7 @@
   width: 100%;
   flex-grow: 1;
   min-height: 0;
-  padding: 40px;
+  padding: 20px 40px 40px 40px; /* Reduced top padding to accommodate roof */
   box-sizing: border-box;
 }
 
@@ -274,12 +294,15 @@
   .rasa-header {
     padding: 0 5vw;
   }
+  .rasa-roof-svg {
+    height: 8vh;
+  }
   .rasa-grid {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     gap: 16px;
     overflow-y: auto;
-    padding: 20px 5vw 60px 5vw;
+    padding: 10px 5vw 60px 5vw;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }

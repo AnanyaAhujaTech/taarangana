@@ -15,7 +15,7 @@ export default function RasaComponent() {
   return (
     <div className="rasa-container">
       <div className="rasa-header">
-        <h1 className="rasa-title">The Nine <span>Rasas</span></h1>
+        <h1 className="rasa-title">Nav-sangram</h1>
         <p className="rasa-subtitle">Each event embodies one of the nine classical emotions — discover the essence that resonates with your soul</p>
       </div>
 
