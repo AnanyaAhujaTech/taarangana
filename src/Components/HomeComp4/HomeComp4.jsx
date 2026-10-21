@@ -30,6 +30,7 @@ const GlitterParticle = ({ x, y, size, color, delay }) => {
         width: `${size}px`, 
         height: `${size}px`,
         backgroundColor: color,
+        /* Fixed syntax error from prompt */
         boxShadow: `0 0 ${size * 2}px ${color}`,
         animationDelay: `${delay}s`
       }} 
@@ -173,23 +174,6 @@ export default function HomeComp4() {
     animationFrameId = requestAnimationFrame(autoScroll);
     return () => cancelAnimationFrame(animationFrameId);
   }, [isAutoScrolling]);
-
-  // 3. Map vertical wheel scroll to horizontal track movement
-  useEffect(() => {
-    const gridElement = gridRef.current;
-    if (!gridElement) return;
-
-    const handleWheel = (e) => {
-      stopAutoScroll(); // Immediately stop the auto-scroll if user starts scrolling
-      if (e.deltaY !== 0) {
-        e.preventDefault();
-        gridElement.scrollLeft += e.deltaY;
-      }
-    };
-
-    gridElement.addEventListener('wheel', handleWheel, { passive: false });
-    return () => gridElement.removeEventListener('wheel', handleWheel);
-  }, [stopAutoScroll]);
 
   // Handle dynamic spotlight & glitter
   const handleInteractionMove = useCallback((e) => {

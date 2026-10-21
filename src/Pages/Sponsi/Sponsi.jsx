@@ -17,19 +17,19 @@ import danglerTop from '../../assets/Dangler Top.webp';
 import mandalaBottom from '../../assets/Mandala.webp';
 
 // The 13 Sponsor Logos
-import logo1 from '../../assets/logo1.png';
-import logo2 from '../../assets/logo2.png';
-import logo3 from '../../assets/logo3.png';
-import logo4 from '../../assets/logo4.png';
-import logo5 from '../../assets/logo5.png';
-import logo6 from '../../assets/logo6.png';
-import logo7 from '../../assets/logo7.png';
-import logo8 from '../../assets/logo8.png';
-import logo9 from '../../assets/logo9.png';
-import logo10 from '../../assets/logo10.png';
-import logo11 from '../../assets/logo11.png';
-import logo12 from '../../assets/logo12.png';
-import logo13 from '../../assets/logo13.png';
+import logo1 from '../../assets/logo1.webp';
+import logo2 from '../../assets/logo2.webp';
+import logo3 from '../../assets/logo3.webp';
+import logo4 from '../../assets/logo4.webp';
+import logo5 from '../../assets/logo5.webp';
+import logo6 from '../../assets/logo6.webp';
+import logo7 from '../../assets/logo7.webp';
+import logo8 from '../../assets/logo8.webp';
+import logo9 from '../../assets/logo9.webp';
+import logo10 from '../../assets/logo10.webp';
+import logo11 from '../../assets/logo11.webp';
+import logo12 from '../../assets/logo12.webp';
+import logo13 from '../../assets/logo13.webp';
 
 const DANGLERS = [dangler1, dangler2, dangler3];
 
@@ -39,15 +39,15 @@ const SPONSORS_DATA = [
   { id: 1, img: logo1, title: "Official Student Partner" },
   { id: 3, img: logo3, title: "Wellness Partner" },
   { id: 4, img: logo4, title: "Indulgeo Essentials Skincare Partner" },
-  { id: 5, img: logo5, title: "Wellness Partner" },
+  { id: 5, img: logo5, title: "Gifting Partner" },
   { id: 6, img: logo6, title: "Banking Partner" },
-  { id: 7, img: logo7, title: "Gifting Partner" },
+  { id: 7, img: logo7, title: "Wellness Partner" },
   { id: 8, img: logo8, title: "Hygiene Partner" },
   { id: 9, img: logo9, title: "Digital Partner" }, // Logo 9 had no specified title
   { id: 10, img: logo10, title: "Dining Partner" },
   { id: 11, img: logo11, title: "Career Partner" },
   { id: 12, img: logo12, title: "Technology Partner" },
-  { id: 13, img: logo13, title: "Food & Beverage Partner" },
+  { id: 13, img: logo13, title: "" },
 ];
 
 /* =========================================================
