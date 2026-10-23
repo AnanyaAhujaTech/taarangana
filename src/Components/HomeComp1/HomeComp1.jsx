@@ -10,12 +10,6 @@ import ModernScene from './ModernScene';
 import Navbar from '../Navbar/Navbar'; 
 
 // =========================================================
-// 🟢 AUDIO ASSETS (Fixed filename to home.mp3)
-// =========================================================
-import traditionalMusic from '../../assets/home.mp3'; 
-import modernMusic from '../../assets/events.mp3'; 
-
-// =========================================================
 // TRADITIONAL ASSETS
 // =========================================================
 
@@ -207,7 +201,6 @@ function TraditionalScene({ onEtherefy, modernAssetsLoaded }) {
           >
             Buy Tickets
           </button>
-
         </div>
       )}
 
@@ -250,19 +243,14 @@ function ChromaGlitchFilter() {
 // =========================================================
 // MAIN COMPONENT
 // =========================================================
-export default function HomeComp1() {
+export default function HomeComp1({ tradAudioRef, modernAudioRef, audioStarted, setAudioStarted }) {
   const [currentScene, setCurrentScene] = useState('traditional');
   const [visitCount, setVisitCount] = useState(0);
   const [modernAssetsLoaded, setModernAssetsLoaded] = useState(false);
   const [navVisible, setNavVisible] = useState(false); 
-  const [audioStarted, setAudioStarted] = useState(false); // 🟢 Audio Tracker
   
   const rootRef = useRef(null);
   const glitchOverlayRef = useRef(null);
-  
-  // Audio Refs
-  const tradAudioRef = useRef(null);
-  const modernAudioRef = useRef(null);
 
   useEffect(() => {
     const storedCount = localStorage.getItem('taarangana_visits');
@@ -287,26 +275,15 @@ export default function HomeComp1() {
     return () => { cancelled = true; };
   }, []);
 
-  // 🟢 Attempt Auto-Play immediately on load
+  // 🟢 Attempt Auto-Play immediately on load (Fallback handled by App.jsx)
   useEffect(() => {
-    if (currentScene === 'traditional' && tradAudioRef.current) {
+    if (currentScene === 'traditional' && tradAudioRef?.current && !audioStarted) {
       tradAudioRef.current.volume = 0.4;
       tradAudioRef.current.play().then(() => {
         setAudioStarted(true);
-      }).catch(() => {
-        // If the browser blocks it, it will silently fail here and wait for the user to click/scroll
-      });
+      }).catch(() => {});
     }
-  }, [currentScene]);
-
-  // 🟢 Handles playing the traditional audio the exact moment the user does anything
-  const handleInitialInteraction = () => {
-    if (!audioStarted && currentScene === 'traditional' && tradAudioRef.current) {
-      tradAudioRef.current.volume = 0.4;
-      tradAudioRef.current.play().catch(() => {});
-      setAudioStarted(true);
-    }
-  };
+  }, [currentScene, tradAudioRef, audioStarted, setAudioStarted]);
 
   const startTransition = () => {
     if (currentScene !== 'traditional' || !modernAssetsLoaded) return;
@@ -318,14 +295,15 @@ export default function HomeComp1() {
       onStart: () => {
         if (rootRef.current) rootRef.current.classList.add('glitching');
         
-        // 🟢 Audio Switch Logic: Pause traditional, start modern
-        if (tradAudioRef.current) {
+        // 🟢 Audio Switch Logic using the refs passed from App.jsx
+        if (tradAudioRef?.current) {
           tradAudioRef.current.pause();
         }
-        if (modernAudioRef.current) {
+        if (modernAudioRef?.current) {
           modernAudioRef.current.volume = 0.5;
           modernAudioRef.current.currentTime = 0;
           modernAudioRef.current.play().catch(() => {});
+          setAudioStarted(true);
         }
       }
     });
@@ -355,33 +333,18 @@ export default function HomeComp1() {
   };
 
   return (
-    <div 
-      className={`homecomp1-root scene-${currentScene}`} 
-      ref={rootRef}
-      // 🟢 Aggressive interaction catchers to ensure audio starts
-      onClick={handleInitialInteraction} 
-      onTouchStart={handleInitialInteraction}
-      onKeyDown={handleInitialInteraction}
-      onWheel={handleInitialInteraction}
-    >
+    <div className={`homecomp1-root scene-${currentScene}`} ref={rootRef}>
       
-      {/* 🟢 Audio Elements */}
-      <audio ref={tradAudioRef} src={traditionalMusic} loop />
-      <audio ref={modernAudioRef} src={modernMusic} loop />
-
       <ChromaGlitchFilter />
       <div className="chroma-glitch-overlay" ref={glitchOverlayRef} />
 
-      {/* NAVBAR CONTROLS */}
       {navVisible && <Navbar isVisible={true} />}
       
       <button 
         className="homecomp1-menu-btn"
         onClick={(e) => {
-          e.stopPropagation(); // Prevents this click from triggering the overall scene interaction unnecessarily
+          e.stopPropagation(); 
           setNavVisible(!navVisible);
-          // If they click the menu button first, we still want the music to start
-          handleInitialInteraction(); 
         }}
       >
         {navVisible ? 'Close Menu' : 'Menu'}

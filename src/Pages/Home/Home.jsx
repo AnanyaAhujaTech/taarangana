@@ -10,7 +10,8 @@ import HomeComp7 from '../../Components/HomeComp7/HomeComp7';
 import { Vortex } from '../../Components/Vortex/Vortex';
 import './Home.css'; 
 
-export default function HomePage() {
+// 🟢 Accept the 4 audio props passed down from App.jsx
+export default function HomePage({ tradAudioRef, modernAudioRef, audioStarted, setAudioStarted }) {
   const [showNavbar, setShowNavbar] = useState(false);
   const [showVortex, setShowVortex] = useState(false); 
   
@@ -64,9 +65,14 @@ export default function HomePage() {
         )}
       </div>
 
-      {/* REMOVED the intermediate div. Sections are now direct children of the wrapper */}
       <section className="snap-section" ref={homeComp1Ref}>
-        <HomeComp1 />
+        {/* 🟢 Pass the 4 audio props down into HomeComp1 */}
+        <HomeComp1 
+          tradAudioRef={tradAudioRef} 
+          modernAudioRef={modernAudioRef} 
+          audioStarted={audioStarted} 
+          setAudioStarted={setAudioStarted} 
+        />
       </section>
 
       <section className="snap-section" ref={homeComp2Ref}>
