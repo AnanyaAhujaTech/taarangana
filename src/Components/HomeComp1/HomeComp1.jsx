@@ -7,6 +7,13 @@ import './HomeComp1.css';
 import LightRays from './LightRays';
 import BlurText from './BlurText';
 import ModernScene from './ModernScene';
+import Navbar from '../Navbar/Navbar'; 
+
+// =========================================================
+// 🟢 AUDIO ASSETS (Fixed filename to home.mp3)
+// =========================================================
+import traditionalMusic from '../../assets/home.mp3'; 
+import modernMusic from '../../assets/events.mp3'; 
 
 // =========================================================
 // TRADITIONAL ASSETS
@@ -247,8 +254,15 @@ export default function HomeComp1() {
   const [currentScene, setCurrentScene] = useState('traditional');
   const [visitCount, setVisitCount] = useState(0);
   const [modernAssetsLoaded, setModernAssetsLoaded] = useState(false);
+  const [navVisible, setNavVisible] = useState(false); 
+  const [audioStarted, setAudioStarted] = useState(false); // 🟢 Audio Tracker
+  
   const rootRef = useRef(null);
   const glitchOverlayRef = useRef(null);
+  
+  // Audio Refs
+  const tradAudioRef = useRef(null);
+  const modernAudioRef = useRef(null);
 
   useEffect(() => {
     const storedCount = localStorage.getItem('taarangana_visits');
@@ -273,6 +287,27 @@ export default function HomeComp1() {
     return () => { cancelled = true; };
   }, []);
 
+  // 🟢 Attempt Auto-Play immediately on load
+  useEffect(() => {
+    if (currentScene === 'traditional' && tradAudioRef.current) {
+      tradAudioRef.current.volume = 0.4;
+      tradAudioRef.current.play().then(() => {
+        setAudioStarted(true);
+      }).catch(() => {
+        // If the browser blocks it, it will silently fail here and wait for the user to click/scroll
+      });
+    }
+  }, [currentScene]);
+
+  // 🟢 Handles playing the traditional audio the exact moment the user does anything
+  const handleInitialInteraction = () => {
+    if (!audioStarted && currentScene === 'traditional' && tradAudioRef.current) {
+      tradAudioRef.current.volume = 0.4;
+      tradAudioRef.current.play().catch(() => {});
+      setAudioStarted(true);
+    }
+  };
+
   const startTransition = () => {
     if (currentScene !== 'traditional' || !modernAssetsLoaded) return;
 
@@ -282,6 +317,16 @@ export default function HomeComp1() {
     const tl = gsap.timeline({
       onStart: () => {
         if (rootRef.current) rootRef.current.classList.add('glitching');
+        
+        // 🟢 Audio Switch Logic: Pause traditional, start modern
+        if (tradAudioRef.current) {
+          tradAudioRef.current.pause();
+        }
+        if (modernAudioRef.current) {
+          modernAudioRef.current.volume = 0.5;
+          modernAudioRef.current.currentTime = 0;
+          modernAudioRef.current.play().catch(() => {});
+        }
       }
     });
 
@@ -310,9 +355,37 @@ export default function HomeComp1() {
   };
 
   return (
-    <div className={`homecomp1-root scene-${currentScene}`} ref={rootRef}>
+    <div 
+      className={`homecomp1-root scene-${currentScene}`} 
+      ref={rootRef}
+      // 🟢 Aggressive interaction catchers to ensure audio starts
+      onClick={handleInitialInteraction} 
+      onTouchStart={handleInitialInteraction}
+      onKeyDown={handleInitialInteraction}
+      onWheel={handleInitialInteraction}
+    >
+      
+      {/* 🟢 Audio Elements */}
+      <audio ref={tradAudioRef} src={traditionalMusic} loop />
+      <audio ref={modernAudioRef} src={modernMusic} loop />
+
       <ChromaGlitchFilter />
       <div className="chroma-glitch-overlay" ref={glitchOverlayRef} />
+
+      {/* NAVBAR CONTROLS */}
+      {navVisible && <Navbar isVisible={true} />}
+      
+      <button 
+        className="homecomp1-menu-btn"
+        onClick={(e) => {
+          e.stopPropagation(); // Prevents this click from triggering the overall scene interaction unnecessarily
+          setNavVisible(!navVisible);
+          // If they click the menu button first, we still want the music to start
+          handleInitialInteraction(); 
+        }}
+      >
+        {navVisible ? 'Close Menu' : 'Menu'}
+      </button>
 
       <div className={`site-visit-counter ${currentScene}-counter`}>
         <span className="counter-label">Visits</span>

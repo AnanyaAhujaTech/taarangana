@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap');
+
+/* Forces the loader to sit on top of literally everything on the site */
+.global-loader-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  
+  /* 🟢 FIX: Changed from solid black to a semi-transparent dark purple */
+  background-color: rgba(5, 0, 10, 0.7); 
+  
+  /* 🟢 ADDED: Blurs whatever is behind the loader so it looks clean */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  
+  z-index: 9999999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Controls the size of the Lottie animation */
+.lottie-container {
+  width: 250px;
+  height: 250px;
+}
+
+.loading-text {
+  font-family: 'Cinzel', serif;
+  color: #d487fa; /* You CAN change this text color right here in CSS */
+  margin-top: 20px;
+  letter-spacing: 3px;
+  font-size: 1.2rem;
+  animation: pulse-opacity 1.5s infinite alternate;
+}
+
+@keyframes pulse-opacity {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}

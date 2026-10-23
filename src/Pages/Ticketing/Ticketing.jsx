@@ -91,7 +91,7 @@ export default function Ticketing() {
           </p>
           
           <a 
-            href="https://forms.gle/9v8Z3LRoTbV8Y9Tv9" 
+            href="https://forms.gle/UL2zgsxxL9vJSt2P9" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="ticketing-task-btn"
